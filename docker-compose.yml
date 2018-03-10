@@ -1,0 +1,33 @@
+version: '3.3'
+
+volumes:
+  dist:
+
+services:
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - /data
+    environment:
+      POSTGRES_PASSWORD: postgres
+    # logging:
+    #   driver: none
+
+  frontend:
+    build: frontend
+    volumes:
+      - dist:/dist
+
+  backend:
+    build: backend
+    volumes:
+      - dist:/app/dist
+    ports:
+      - '80:80'
+    environment:
+      REDIS_ADDRESS: redis:6379
+    tty: true
+    depends_on:
+      - frontend
+      - redis

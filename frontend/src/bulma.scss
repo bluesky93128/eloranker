@@ -1,0 +1,8 @@
+@import '~bulma/sass/utilities/initial-variables';
+@import '~bulma/sass/utilities/functions';
+
+$input-focus-color: $grey-darker;
+$input-focus-border-color: $grey-lighter;
+$input-focus-box-shadow-size: 0;
+
+@import '~bulma';
