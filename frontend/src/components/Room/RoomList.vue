@@ -1,13 +1,13 @@
 <template>
   <div :class="$style.variants">
+    <VariantElement @updateSelection="updateSelection" />
+
     <VariantElement
       ref="elements"
       v-for="variant in sortedVariants"
       :key="variant.uuid"
       :variant="variant"
     />
-
-    <VariantElement @updateSelection="updateSelection" />
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default class RoomList extends Vue {
   display: flex;
   flex-flow: row wrap;
 
-  > :last-child {
+  > :first-child {
     opacity: 0.5;
   }
 }
