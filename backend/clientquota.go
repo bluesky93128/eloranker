@@ -33,7 +33,14 @@ func (c *Client) getIgnoredVariants() (map[string]bool, error) {
 	conn := pool.Get()
 	defer conn.Close()
 
-	return map[string]bool{}, nil // redisutil.ArrayToMap(conn.Do("SMEMBERS", ""))
+	return redisutil.ArrayToMap(conn.Do("SMEMBERS", "room:"+c.room.name+":ignored:"+c.getUniqueIdentifier()))
+}
+
+func (c *Client) getIgnoredVariantsLength() (int, error) {
+	conn := pool.Get()
+	defer conn.Close()
+
+	return redis.Int(conn.Do("SCARD", "room:"+c.room.name+":ignored:"+c.getUniqueIdentifier()))
 }
 
 // SelectRandomPair returns a pair of variants for voting

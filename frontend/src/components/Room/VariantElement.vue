@@ -33,11 +33,19 @@
 
     <div v-if="!voting && !isNew">{{ variant.rating }}</div>
     <button class="button" @click="findImage" :disabled="!canFindImage">Google Images</button>
+
+    <button
+      class="button"
+      v-if="!isNew"
+      :disabled="!isIgnored && !canIgnoreVariant"
+      @click="setIgnored(!isIgnored)"
+    >{{ isIgnored ? 'UNIGNORE' : 'IGNORE' }}</button>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 import connection from '@/connection';
 import { Variant, emptyVariant } from '@/room';
 
@@ -48,6 +56,8 @@ import googleAutocomplete from '@/google-autocomplete';
 export default class VariantElement extends Vue {
   $refs!: { textInput: HTMLInputElement; imageInput: HTMLInputElement };
 
+  @Getter canIgnoreVariant!: boolean;
+
   @Prop({ type: Object, default: emptyVariant })
   variant!: Variant;
 
@@ -57,6 +67,16 @@ export default class VariantElement extends Vue {
   autocomplete: string[] = [];
   fallbackImage: string = require('@/assets/no-image.png');
   waitingForAllocation = false;
+
+  get isIgnored() {
+    return this.$store.getters.isIgnoredVariant(this.variant.uuid);
+  }
+
+  setIgnored(ignored: boolean) {
+    const id = this.variant.uuid;
+    this.$store.commit('setVariantIgnored', { id, ignored });
+    connection.setVariantIgnored(id, ignored);
+  }
 
   get isNew() {
     return this.variant.uuid === '';

@@ -21,6 +21,7 @@ interface State {
   roomEditMode: EditMode;
 
   identifier: string;
+  ignoredVariants: { [id: string]: boolean };
   clientNumber: number;
   variants: Variant[];
   sortingOrder: SortingOrder;
@@ -37,6 +38,7 @@ const baseState: State = {
   roomEditMode: EditMode.Normal,
 
   identifier: '',
+  ignoredVariants: {},
   clientNumber: 0,
   variants: [],
   sortingOrder: SortingOrder.DATE,
@@ -44,6 +46,15 @@ const baseState: State = {
 
 const getters: GetterTree<State, any> = {
   findVariant: state => (id: string) => state.variants.find(v => v.uuid === id),
+  isIgnoredVariant: state => (id: string) => state.ignoredVariants[id],
+  canIgnoreVariant: state => {
+    if (state.variants.length < 6) return false;
+
+    const { ignoredVariants } = state;
+    const ignoredVariantsLen = Object.keys(ignoredVariants).filter(k => ignoredVariants[k]).length;
+    return ignoredVariantsLen * 2 < state.variants.length;
+  },
+
   canVote: state => state.variants.length >= 2,
   sortedVariants: state => state.variants.slice().sort(sorters.get(state.sortingOrder)),
   hasWriteAccess: (state, getters) => (id: string) => {
@@ -97,10 +108,15 @@ const mutations: MutationTree<State> = {
     state.isAdmin = event.isAdmin;
     state.variants = event.variants;
     state.identifier = event.identifier;
+    state.ignoredVariants = event.ignoredVariants;
 
     store.commit('setTitle', event.title);
     store.commit('setQuotaEnabled', event.quotaEnabled);
     store.commit('setEditMode', event.editMode);
+  },
+
+  setVariantIgnored(state, { id, ignored }: { id: string; ignored: boolean }) {
+    Vue.set(state.ignoredVariants, id, ignored);
   },
 
   setSortingOrder(state, value: SortingOrder) {

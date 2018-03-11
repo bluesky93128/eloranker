@@ -128,6 +128,10 @@ export class Connection extends EventEmitter {
     this.send('voting:submit', { uuid });
   }
 
+  public setVariantIgnored(uuid: string, ignored: boolean) {
+    this.send('variant:setIgnored', { uuid, ignored });
+  }
+
   public setTitle(value: string) {
     this.send('settings:title', { value });
   }

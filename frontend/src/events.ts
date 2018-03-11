@@ -18,6 +18,7 @@ export type JoinRoomEvent = ResponseEvent & {
   title: string;
   quotaEnabled: boolean;
   editMode: EditMode;
+  ignoredVariants: { [id: string]: true };
 };
 
 export type AllocateVariantEvent = ResponseEvent & Partial<Variant>;

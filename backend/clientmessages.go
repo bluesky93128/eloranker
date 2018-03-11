@@ -5,6 +5,7 @@ import (
 
 	"errors"
 	"github.com/ark120202/easy-elo-ranker/backend/variant"
+	"github.com/garyburd/redigo/redis"
 	"sync"
 )
 
@@ -37,6 +38,11 @@ type requestMessageDataUpdateVariant struct {
 	Image string `json:"image"`
 }
 
+type requestMessageDataSetVariantIgnored struct {
+	UUID    string `json:"uuid"`
+	Ignored bool   `json:"ignored"`
+}
+
 type requestMessageDataSubmitVoting struct {
 	UUID string `json:"uuid"`
 }
@@ -55,6 +61,10 @@ func (c *Client) handleMessage(request *requestMessage) {
 		var message requestMessageDataUpdateVariant
 		json.Unmarshal(request.Data, &message)
 		c.updateVariant(message)
+	case "variant:setIgnored":
+		var message requestMessageDataSetVariantIgnored
+		json.Unmarshal(request.Data, &message)
+		c.setVariantIgnored(message)
 	case "voting:get":
 		c.getVoting()
 	case "voting:submit":
@@ -136,16 +146,18 @@ func (c *Client) joinRoom(message requestMessageDataJoinRoom) {
 	var title string
 	var quotaEnabled bool
 	var editMode EditMode
-	var err1, err2, err3, err4 error
+	var ignoredVariants map[string]bool
+	var err1, err2, err3, err4, err5 error
 
 	runGroup(
 		func() { isAdmin, err1 = c.IsAdmin() },
 		func() { title, err2 = room.GetTitle() },
 		func() { quotaEnabled, err3 = room.IsQuotaEnabled() },
 		func() { editMode, err4 = room.GetEditMode() },
+		func() { ignoredVariants, err5 = c.getIgnoredVariants() },
 	)
 
-	if err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+	if err1 != nil || err2 != nil || err3 != nil || err4 != nil || err5 != nil {
 		c.Error("internal error: couldn't read room data", "room:join")
 		c.room = nil
 		c.secret = ""
@@ -155,9 +167,10 @@ func (c *Client) joinRoom(message requestMessageDataJoinRoom) {
 	room.register <- c
 
 	c.Send(map[string]interface{}{
-		"event":      "room:join",
-		"variants":   variants,
-		"identifier": c.getUniqueIdentifier(),
+		"event":           "room:join",
+		"variants":        variants,
+		"identifier":      c.getUniqueIdentifier(),
+		"ignoredVariants": ignoredVariants,
 
 		"isAdmin":      isAdmin,
 		"title":        title,
@@ -208,6 +221,61 @@ func (c *Client) updateVariant(message requestMessageDataUpdateVariant) {
 	err = c.room.UpdateVariant(c, message)
 	if err != nil {
 		c.Error(err.Error(), "variant:update")
+	}
+}
+
+func (c *Client) setVariantIgnored(message requestMessageDataSetVariantIgnored) {
+	if c.room == nil {
+		c.Error("you should be in room to ignore variants", "variant:setIgnored")
+		return
+	}
+	if message.UUID == "" {
+		c.Error("invalud variant id", "variant:setIgnored")
+		return
+	}
+
+	conn := pool.Get()
+	defer conn.Close()
+
+	ignoredKey := "room:" + c.room.name + ":ignored:" + c.getUniqueIdentifier()
+
+	isMember, err := redis.Bool(conn.Do("SISMEMBER", ignoredKey, message.UUID))
+	if err != nil {
+		c.Error(err.Error(), "variant:setIgnored")
+		return
+	}
+	if isMember == message.Ignored {
+		c.Error(message.UUID+" is already in the same state", "variant:setIgnored")
+		return
+	}
+
+	if message.Ignored {
+		variants, err := c.room.getVariantsLength()
+		if err != nil {
+			c.Error(err.Error(), "variant:setIgnored")
+			return
+		}
+		if variants < 6 {
+			c.Error("6 variants or more are required to ignore", "variant:setIgnored")
+			return
+		}
+
+		ignoredVariants, err := c.getIgnoredVariantsLength()
+		if err != nil {
+			c.Error(err.Error(), "variant:setIgnored")
+			return
+		}
+
+		if ignoredVariants * 2 >= variants {
+			c.Error("you can't ignore more variants", "variant:setIgnored")
+			return
+		}
+	}
+
+	if message.Ignored {
+		conn.Do("SADD", ignoredKey, message.UUID)
+	} else {
+		conn.Do("SREM", ignoredKey, message.UUID)
 	}
 }
 
