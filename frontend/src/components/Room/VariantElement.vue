@@ -32,7 +32,12 @@
     </datalist>
 
     <div v-if="!voting && !isNew">{{ variant.rating }}</div>
-    <button class="button" @click="findImage" :disabled="!canFindImage">Google Images</button>
+    <button
+      class="button"
+      @click="findImage"
+      v-if="!voting"
+      :disabled="!canFindImage"
+    >Google Images</button>
 
     <button
       class="button"
