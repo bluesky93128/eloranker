@@ -88,7 +88,7 @@ export default class VariantElement extends Vue {
   }
 
   get canFindImage() {
-    return this.hasEditPermissions && this.variant.text !== '';
+    return this.hasEditPermissions && this.variant.text !== '' && !this.isNew;
   }
 
   get autocompleteId() {
