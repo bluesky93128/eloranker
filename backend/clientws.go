@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"net"
 )
 
 var upgrader = websocket.Upgrader{
@@ -140,10 +141,11 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	client := &Client{
 		ws:      ws,
 		sent:    make(chan []byte, 256),
-		ip:      r.RemoteAddr,
+		ip:      ip,
 		session: session.Value,
 	}
 
