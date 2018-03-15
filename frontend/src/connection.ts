@@ -141,7 +141,8 @@ export class Connection extends EventEmitter {
   }
 }
 
-const socketHost = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost';
+//const socketHost = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost';
+const socketHost = '163.172.174.77';
 const socketUrl = `${window.location.protocol === 'https' ? 'wss' : 'ws'}://${socketHost}/ws`;
 
 export default new Connection(socketUrl);

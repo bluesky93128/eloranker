@@ -1,13 +1,17 @@
 <template>
-  <div :class="$style.variants">
-    <VariantElement
-      ref="elements"
-      v-for="variant in sortedVariants"
-      :key="variant.uuid"
-      :variant="variant"
-    />
+  <div :class="['columns', 'is-multiline', 'is-mobile']">
+    <!-- <div :class="['tile', 'is-5', 'is-parent']"> -->
+      <VariantElement
+        ref="elements"
+        v-for="(variant, index) in sortedVariants"
+        :number="index"
+        :key="variant.uuid"
+        :variant="variant"
+      />
 
-    <VariantElement @updateSelection="updateSelection" />
+      <VariantElement @updateSelection="updateSelection" :number="sortedVariants.length" />
+      <VariantElement v-if="sortedVariants.length < 1" @updateSelection="updateSelection" :number="sortedVariants.length+1" />
+    <!-- </div> -->
   </div>
 </template>
 
@@ -32,12 +36,4 @@ export default class RoomList extends Vue {
 </script>
 
 <style lang="scss" module>
-.variants {
-  display: flex;
-  flex-flow: row wrap;
-
-  > :last-child {
-    opacity: 0.5;
-  }
-}
 </style>

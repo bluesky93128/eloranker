@@ -1,38 +1,90 @@
 <template>
-  <div :class="$style.variant">
-    <img
-      :class="$style.image"
-      :src="variant.image || fallbackImage"
-      @error="$event.target.src = fallbackImage"
-    >
-    <input
-      ref="imageInput"
-      v-if="!voting"
-      :class="$style.imageInput"
-      v-model="variant.image"
-      @input="pushVariantUpdate"
+  <div :class="['column', voting ? 'is-one-third' : 'is-one-quarter']">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          {{ (number + 1) + ". " + variant.text }}
+        </p>
+        <div class="card-header-icon dropdown is-hoverable">
+          <div class="dropdown-trigger">
+            <span class="icon">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+            <div class="dropdown-content">
+              <a class="dropdown-item" @click="findImage">
+                <span class="icon">
+                  <i class="fab fa-google"></i>
+                </span>
+                From Google Images
+              </a>
+              <a class="dropdown-item" @click="openImageSelector">
+                <span class="icon">
+                  <i class="fas fa-image"></i>
+                </span>
+                From file/URL
+              </a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item">
+                <span class="icon">
+                  <i class="fas fa-trash"></i>
+                </span>
+                Delete
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <img
+            :src="variant.image || fallbackImage"
+            @error="$event.target.src = fallbackImage"
+          >
+        </figure>
+      </div>
+      <div v-if="!voting" class="card-content">
+        <div class="field">
+          <div :class="['control', { 'is-loading': waitingForImage }]">
+            <input
+              ref="textInput"
+              class="input"
+              :class="[$style.textInput, { 'is-static': voting }]"
+              v-model="variant.text"
+              @input="onTextInput"
+              :list="autocompleteId"
+              maxlength="100"
+              placeholder="Option Name"
+              :readonly="!hasEditPermissions"
+            >
+          </div>
+        </div>
+        <div class="field">
+          <div :class="['control']">
+            <input
+              type="hidden"
+              ref="imageInput"
+              v-if="!voting"
+              class="input"
+              :class="$style.imageInput"
+              v-model="variant.image"
+              @input="pushVariantUpdate"
 
-      :readonly="!hasEditPermissions"
-    >
-    <input
-      ref="textInput"
-      class="input"
-      :class="[$style.textInput, { 'is-static': voting }]"
-      v-model="variant.text"
-      @input="onTextInput"
-      :list="autocompleteId"
-      maxlength="100"
+              :readonly="!hasEditPermissions"
+            >
+          </div>
+        </div>
+        <!-- TODO: Serverside maxlength validation -->
 
-      :readonly="!hasEditPermissions"
-    >
-    <!-- TODO: Serverside maxlength validation -->
+        <datalist :id="autocompleteId">
+          <option v-for="text in autocomplete" :key="text" :value="text" />
+        </datalist>
 
-    <datalist :id="autocompleteId">
-      <option v-for="text in autocomplete" :key="text" :value="text" />
-    </datalist>
-
-    <div v-if="!voting && !isNew">{{ variant.rating }}</div>
-    <button class="button" @click="findImage" :disabled="!canFindImage">Google Images</button>
+        <!-- <div v-if="!voting && !isNew">{{ variant.rating }}</div> -->
+        <SelectImage v-show="selectingImage" @close="closeImageSelector"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,7 +96,9 @@ import { Variant, emptyVariant } from '@/room';
 import GoogleImageSearch from 'free-google-image-search';
 import googleAutocomplete from '@/google-autocomplete';
 
-@Component
+import SelectImage from '@/components/Util/SelectImage.vue';
+
+@Component({ components: { SelectImage } })
 export default class VariantElement extends Vue {
   $refs!: { textInput: HTMLInputElement; imageInput: HTMLInputElement };
 
@@ -54,9 +108,14 @@ export default class VariantElement extends Vue {
   @Prop({ type: Boolean, default: false })
   voting!: boolean;
 
+  @Prop({ type: Number, default: 0 })
+  number!: number;
+
   autocomplete: string[] = [];
   fallbackImage: string = require('@/assets/no-image.png');
   waitingForAllocation = false;
+  waitingForImage = false;
+  selectingImage = false;
 
   get isNew() {
     return this.variant.uuid === '';
@@ -70,11 +129,22 @@ export default class VariantElement extends Vue {
     return `variant-${this.variant.uuid}`;
   }
 
+  async openImageSelector() {
+    this.selectingImage = true;
+  }
+
+  async closeImageSelector(option: Number) {
+    console.log(option);
+    this.selectingImage = false;
+  }
+
   async findImage() {
     if (!this.canFindImage) return;
     const variant = this.variant!;
 
+    this.waitingForImage = true;
     const images = await GoogleImageSearch.searchImage(variant.text);
+    this.waitingForImage = false;
     if (images.length === 0) return;
 
     variant.image = images[0];
@@ -139,26 +209,11 @@ export default class VariantElement extends Vue {
 </script>
 
 <style lang="scss" module>
-.variant {
-  border: 1px solid red;
-  margin: 2px;
-  width: 350px;
-  display: flex;
-  flex-flow: column;
-}
-
 .image {
-  height: 150px;
-  object-fit: contain;
+  transition: 0.3s all;
 }
 
-.imageInput {
-  width: 100%;
-}
-
-.textInput {
-  width: 100%;
-  min-height: 3rem;
-  font-size: 1.25rem;
+.image:hover {
+  transform: scaleX(1.5);
 }
 </style>

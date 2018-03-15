@@ -6,3 +6,51 @@ $input-focus-border-color: $grey-lighter;
 $input-focus-box-shadow-size: 0;
 
 @import '~bulma';
+
+.navbar-item img {
+    transition: transform 0.1s ease-in 0.0s
+}
+
+.navbar-item img:hover {
+    transform: rotateZ(1deg)
+}
+
+.navbar-item img:active {
+    transform: translateY(2px)
+}
+
+.footer {
+    border-top-width: 1px;
+    border-top-color: #DDDDDD;
+    border-top-style: solid;
+
+    padding: 0.5rem;
+
+    .container .tabs {
+        justify-content: center;
+
+        ul {
+            border-bottom: none;
+            flex-grow: 0;
+            
+            li {
+                a {
+                    color: #748490;
+                }
+
+                a:hover {
+                    color: black;
+                }
+            }
+        }
+    }
+}
+
+.button.is-red,
+.hero.is-red {
+    background-color: #df0024;
+}
+
+.button.is-red:hover {
+    background-color: #ba001e;
+}

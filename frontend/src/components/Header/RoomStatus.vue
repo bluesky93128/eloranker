@@ -1,44 +1,96 @@
 <template>
-  <div :class="$style.roomStatus">
-    <div>
-      <input type="checkbox" v-model="exposeSecret" v-if="isAdmin">
-      <input :class="$style.shareableLink" type="text" readonly :value="shareableLink" ref="shareableLink">
-      <button @click="copyLink">COPY</button>
-    </div>
+  <div>
+    <section class="hero is-primary is-red">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns">
+            <div class="column is-one-third">
+              <div class="content">
+                <h1 class="title">
+                  Creating new poll
+                </h1>
 
-    <div>Connected Clients: {{ clientNumber }}</div>
+                <h5 class="subtitle">
+                  Enter poll name and add minimum of 3 options
+                </h5>
 
+                <div class="field">
+                  <div class="control">
+                    <input :class="['input', 'is-rounded', 'is-large']" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin" placeholder="Poll Name">
+                  </div>
+                </div>
 
-    <select v-model="sortingOrder">
-      <option :value="SortingOrder.DATE">Sort by Date</option>
-      <option :value="SortingOrder.RATING">Sort by Rating</option>
-    </select>
+                <div class="field is-grouped">
+                  <router-link
+                    class="control button is-rounded is-large is-warning"
+                    tag="button"
+                    :to="{ name: 'room-list', params: $route.params }"
+                  >
+                    <span class="icon is-small">
+                      <i class="fas fa-edit"></i>
+                    </span>
+                    <span>
+                      Edit
+                    </span>
+                  </router-link>
+                  <router-link
+                    class="control button is-rounded is-large"
+                    tag="button"
+                    :to="{ name: 'room-voting', params: $route.params }"
+                    :disabled="!canVote"
+                  >   Start voting   </router-link>
+                </div>
+              </div>
+            </div>
+            <div class="column is-one-third">
+            </div>
+            <div class="column is-one-third">
+              <div class="content">
+                <h1 class="title">
+                  Settings
+                </h1>
 
+                <input type="checkbox" v-model="exposeSecret" v-if="isAdmin">
+                <div class="field">
+                  <div class="control has-icons-right">
+                    <input class="input" type="text" readonly :value="shareableLink" ref="shareableLink">
+                    <span class="icon is-small is-right" @click="copyLink">
+                      <i class="fas fa-clipboard"></i>
+                    </span>
+                  </div>
+                </div>
 
-    <div>
-      <router-link
-        class="button"
-        tag="button"
-        :to="{ name: 'room-list', params: $route.params }"
-      >EDIT</router-link>
-      <router-link
-        class="button"
-        tag="button"
-        :to="{ name: 'room-voting', params: $route.params }"
-        :disabled="!canVote"
-      >VOTE</router-link>
-    </div>
+                <div class="field">
+                  <div class="control">
+                    <div class="select">
+                      <select v-model="sortingOrder">
+                        <option :value="SortingOrder.DATE">Sort by Date</option>
+                        <option :value="SortingOrder.RATING">Sort by Rating</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
 
+                <input type="checkbox" :checked="roomQuotaEnabled" @change="onQuotaChange" :disabled="!isAdmin">
+                <div class="field">
+                  <div class="control">
+                    <div class="select">
+                      <select :value="roomEditMode" @input="onEditModeChange" :disabled="!isAdmin">
+                        <option :value="EditMode.Trust">Trust Mode</option>
+                        <option :value="EditMode.Normal">Normal Mode</option>
+                        <option :value="EditMode.Restricted">Restricted Mode</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-    <div>
-      <input type="checkbox" :checked="roomQuotaEnabled" @change="onQuotaChange" :disabled="!isAdmin">
-      <select :value="roomEditMode" @input="onEditModeChange" :disabled="!isAdmin">
-        <option :value="EditMode.Trust">Trust Mode</option>
-        <option :value="EditMode.Normal">Normal Mode</option>
-        <option :value="EditMode.Restricted">Restricted Mode</option>
-      </select>
-      <input :class="$style.roomTitle" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin">
-    </div>
+              <h5 class="subtitle">Connected Clients: {{ clientNumber }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 

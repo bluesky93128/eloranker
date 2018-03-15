@@ -1,8 +1,12 @@
 <template>
   <div>
-    <VariantElement v-if="pair" voting :variant="pairVariants[0]" @click.native="vote(pair[0])" />
-    <VariantElement v-if="pair" voting :variant="pairVariants[1]" @click.native="vote(pair[1])" />
-    <button class="button" @click="nextPair">SKIP</button>
+    <div :class="['columns', 'is-mobile', 'is-centered']">
+      <VariantElement v-if="pair" voting :variant="pairVariants[0]" @click.native="vote(pair[0])" />
+      <div :class="['column', 'is-one-third']">
+        <button class="button" @click="nextPair">SKIP</button>
+      </div>
+      <VariantElement v-if="pair" voting :variant="pairVariants[1]" @click.native="vote(pair[1])" />
+    </div>
   </div>
 </template>
 

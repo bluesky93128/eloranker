@@ -1,20 +1,33 @@
 <template>
   <div id="app">
     <Header />
-    <router-view />
+    <div v-if="joined">
+      <RoomStatus :class="$style.roomStatus" />
+    </div>
+    <section class="section">
+      <div class="container">
+        <router-view />
+      </div>
+    </section>
     <div v-if="error" :class="$style.errorOverlay">
       <div :class="$style.errorOverlayMessage">{{ error }}</div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { State } from 'vuex-class';
 import connection from '@/connection';
 import Header from './components/Header/Header.vue';
+import Footer from './components/Footer/Footer.vue';
+import RoomStatus from '@/components/Header/RoomStatus.vue';
 
-@Component({ components: { Header } })
+@Component({ components: { Header, Footer, RoomStatus } })
 export default class App extends Vue {
+  @State joined!: boolean;
+
   socketClosed = false;
 
   mounted() {
@@ -36,14 +49,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss" module>
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans|Fira+Sans+Condensed:400,500');
+
 :global #app {
-  text-align: center;
-  color: #2c3e50;
-  min-width: 200px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column;
+  background: #f5f5f5;
 }
 
 .errorOverlay {
