@@ -31,6 +31,7 @@
     "@vue/cli-service": "^3.0.0-beta.1",
     "autoprefixer": "^7.2.4",
     "cross-env": "^5.1.3",
+    "fontello-webpack-plugin": "^0.4.7",
     "node-sass": "^4.7.2",
     "postcss": "^6.0.19",
     "prettier": "^1.11.0-rc.1",
