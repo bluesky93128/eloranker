@@ -5,5 +5,12 @@
   "hinting": true,
   "units_per_em": 1000,
   "ascent": 850,
-  "glyphs": []
+  "glyphs": [
+    {
+      "uid": "bbfb51903f40597f0b70fd75bc7b5cac",
+      "css": "trash",
+      "code": 61944,
+      "src": "fontawesome"
+    }
+  ]
 }
