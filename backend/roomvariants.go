@@ -40,7 +40,6 @@ func (r *Room) AllocateNewVariant(author *Client) (string, error) {
 }
 
 // RemoveVariant removes variant from room
-// TODO: Implement clientside code
 func (r *Room) RemoveVariant(initiator *Client, id string) error {
 	conn := pool.Get()
 	defer conn.Close()
@@ -57,7 +56,7 @@ func (r *Room) RemoveVariant(initiator *Client, id string) error {
 		"event": "variant:remove",
 		"id":    id,
 	}
-	r.SendToEveryone(nil, fields)
+	r.SendToEveryone(initiator, fields)
 
 	return nil
 }

@@ -119,6 +119,10 @@ const mutations: MutationTree<State> = {
     Vue.set(state.ignoredVariants, id, ignored);
   },
 
+  removeVariant(state, id: string) {
+    state.variants = state.variants.filter(v => v.uuid !== id);
+  },
+
   setSortingOrder(state, value: SortingOrder) {
     state.sortingOrder = value;
   },
@@ -164,6 +168,10 @@ connection.on('variant:allocate', init => store.commit('createVariant', init));
 connection.on('variant:update', event => {
   if (event.error) throw new Error(event.error);
   store.commit('updateVariant', event);
+});
+connection.on('variant:remove', event => {
+  if (event.error) throw new Error(event.error);
+  store.commit('removeVariant', event.id);
 });
 
 connection.on('settings:title', ({ error, value }) => {

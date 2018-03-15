@@ -39,6 +39,12 @@ export type UpdateVariantEvent = Partial<Variant> & {
   uuid: string;
 };
 
+export type RemoveVariantEvent = {
+  event: string;
+  error?: string;
+  id: string;
+};
+
 export type SettingsTitleEvent = ResponseEvent & { value: string };
 export type SettingsQuotaEvent = ResponseEvent & { value: boolean };
 export type SettingsEditModeEvent = ResponseEvent & { value: EditMode };

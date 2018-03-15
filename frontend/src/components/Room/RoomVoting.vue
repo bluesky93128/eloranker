@@ -7,19 +7,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import { Vue, Component, Watch } from 'vue-property-decorator';
+import { State, Getter } from 'vuex-class';
 import { Variant } from '@/room';
 import connection from '@/connection';
 import VariantElement from './VariantElement.vue';
 
 @Component({ components: { VariantElement } })
 export default class RoomVoting extends Vue {
+  @State variants!: Variant[];
   @Getter findVariant!: (id: string) => Variant | undefined;
   pair: [string, string] | null = null;
 
   get pairVariants() {
-    if (this.pair == null) return null;
+    if (this.pair == null) return [];
     return this.pair.map(id => this.findVariant(id));
   }
 
@@ -36,6 +37,13 @@ export default class RoomVoting extends Vue {
 
       this.pair = variants;
     });
+  }
+
+  @Watch('variants')
+  onVariantsUpdate() {
+    if (this.pairVariants.some(v => v == null)) {
+      this.nextPair();
+    }
   }
 
   async nextPair() {

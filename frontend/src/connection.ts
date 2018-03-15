@@ -27,6 +27,8 @@ export interface Connection extends EventEmitter {
   once(event: 'room:clients', listener: (event: events.RoomClientsEvent) => void): this;
   on(event: 'variant:update', listener: (event: events.UpdateVariantEvent) => void): this;
   once(event: 'variant:update', listener: (event: events.UpdateVariantEvent) => void): this;
+  on(event: 'variant:remove', listener: (event: events.RemoveVariantEvent) => void): this;
+  once(event: 'variant:remove', listener: (event: events.RemoveVariantEvent) => void): this;
 
   on(event: 'settings:title', listener: (event: events.SettingsTitleEvent) => void): this;
   once(event: 'settings:title', listener: (event: events.SettingsTitleEvent) => void): this;
@@ -130,6 +132,10 @@ export class Connection extends EventEmitter {
 
   public setVariantIgnored(uuid: string, ignored: boolean) {
     this.send('variant:setIgnored', { uuid, ignored });
+  }
+
+  public removeVariant(id: string) {
+    this.send('variant:remove', { id });
   }
 
   public setTitle(value: string) {

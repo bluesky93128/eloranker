@@ -45,6 +45,13 @@
       :disabled="!isIgnored && !canIgnoreVariant"
       @click="setIgnored(!isIgnored)"
     >{{ isIgnored ? 'UNIGNORE' : 'IGNORE' }}</button>
+
+    <button
+      class="button"
+      @click="remove"
+      v-if="!isNew && !voting"
+      :disabled="!hasEditPermissions"
+    >RM</button>
   </div>
 </template>
 
@@ -159,6 +166,12 @@ export default class VariantElement extends Vue {
 
   get hasEditPermissions() {
     return this.$store.getters.hasWriteAccess(this.variant.uuid);
+  }
+
+  async remove() {
+    const id = this.variant.uuid;
+    this.$store.commit('removeVariant', id);
+    connection.removeVariant(id);
   }
 }
 </script>

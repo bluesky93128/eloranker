@@ -43,6 +43,10 @@ type requestMessageDataSetVariantIgnored struct {
 	Ignored bool   `json:"ignored"`
 }
 
+type requestMessageDataRemoveVariant struct {
+	ID string `json:"id"`
+}
+
 type requestMessageDataSubmitVoting struct {
 	UUID string `json:"uuid"`
 }
@@ -65,6 +69,10 @@ func (c *Client) handleMessage(request *requestMessage) {
 		var message requestMessageDataSetVariantIgnored
 		json.Unmarshal(request.Data, &message)
 		c.setVariantIgnored(message)
+	case "variant:remove":
+		var message requestMessageDataRemoveVariant
+		json.Unmarshal(request.Data, &message)
+		c.removeVariant(message.ID)
 	case "voting:get":
 		c.getVoting()
 	case "voting:submit":
@@ -230,7 +238,7 @@ func (c *Client) setVariantIgnored(message requestMessageDataSetVariantIgnored) 
 		return
 	}
 	if message.UUID == "" {
-		c.Error("invalud variant id", "variant:setIgnored")
+		c.Error("invalid variant id", "variant:setIgnored")
 		return
 	}
 
@@ -266,7 +274,7 @@ func (c *Client) setVariantIgnored(message requestMessageDataSetVariantIgnored) 
 			return
 		}
 
-		if ignoredVariants * 2 >= variants {
+		if ignoredVariants*2 >= variants {
 			c.Error("you can't ignore more variants", "variant:setIgnored")
 			return
 		}
@@ -277,6 +285,25 @@ func (c *Client) setVariantIgnored(message requestMessageDataSetVariantIgnored) 
 	} else {
 		conn.Do("SREM", ignoredKey, message.UUID)
 	}
+}
+
+func (c *Client) removeVariant(id string) {
+	if c.room == nil {
+		c.Error("you should be in room to allocate variant", "variant:remove")
+		return
+	}
+
+	canWrite, err := c.hasWriteAccess(id)
+	if err != nil {
+		c.Error(err.Error(), "variant:remove")
+		return
+	}
+	if !canWrite {
+		c.Error("not enough permissions to remove variant", "variant:remove")
+		return
+	}
+
+	c.room.RemoveVariant(c, id)
 }
 
 func (c *Client) getVoting() {
