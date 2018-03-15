@@ -2345,9 +2345,9 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.1"
     readable-stream "^2.0.4"
 
-fontello-webpack-plugin@gabiseabra/fontello-webpack-plugin#17/head:
+fontello-webpack-plugin@pavelloz/fontello-webpack-plugin#96f9ba9eb75cabdf106b8286faf9ed4299f07816:
   version "0.4.7"
-  resolved "https://codeload.github.com/gabiseabra/fontello-webpack-plugin/tar.gz/96f9ba9eb75cabdf106b8286faf9ed4299f07816"
+  resolved "https://codeload.github.com/pavelloz/fontello-webpack-plugin/tar.gz/96f9ba9eb75cabdf106b8286faf9ed4299f07816"
   dependencies:
     form-data "^2.1.2"
     https-proxy-agent "^2.1.1"
