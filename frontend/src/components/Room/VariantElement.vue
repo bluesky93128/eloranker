@@ -81,6 +81,15 @@
           <option v-for="text in autocomplete" :key="text" :value="text" />
         </datalist>
 
+        <div class="field is-grouped">
+          <button
+            class="button"
+            v-if="!isNew"
+            :disabled="!isIgnored && !canIgnoreVariant"
+            @click="setIgnored(!isIgnored)"
+          >{{ isIgnored ? 'UNIGNORE' : 'IGNORE' }}</button>
+        </div>
+
         <!-- <div v-if="!voting && !isNew">{{ variant.rating }}</div> -->
         <SelectImage v-show="selectingImage" @close="closeImageSelector"/>
       </div>
@@ -90,6 +99,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 import connection from '@/connection';
 import { Variant, emptyVariant } from '@/room';
 
@@ -101,6 +111,8 @@ import SelectImage from '@/components/Util/SelectImage.vue';
 @Component({ components: { SelectImage } })
 export default class VariantElement extends Vue {
   $refs!: { textInput: HTMLInputElement; imageInput: HTMLInputElement };
+
+  @Getter canIgnoreVariant!: boolean;
 
   @Prop({ type: Object, default: emptyVariant })
   variant!: Variant;
@@ -117,12 +129,22 @@ export default class VariantElement extends Vue {
   waitingForImage = false;
   selectingImage = false;
 
+  get isIgnored() {
+    return this.$store.getters.isIgnoredVariant(this.variant.uuid);
+  }
+
+  setIgnored(ignored: boolean) {
+    const id = this.variant.uuid;
+    this.$store.commit('setVariantIgnored', { id, ignored });
+    connection.setVariantIgnored(id, ignored);
+  }
+
   get isNew() {
     return this.variant.uuid === '';
   }
 
   get canFindImage() {
-    return this.hasEditPermissions && this.variant.text !== '';
+    return this.hasEditPermissions && this.variant.text !== '' && !this.isNew;
   }
 
   get autocompleteId() {
@@ -204,6 +226,12 @@ export default class VariantElement extends Vue {
 
   get hasEditPermissions() {
     return this.$store.getters.hasWriteAccess(this.variant.uuid);
+  }
+
+  async remove() {
+    const id = this.variant.uuid;
+    this.$store.commit('removeVariant', id);
+    connection.removeVariant(id);
   }
 }
 </script>

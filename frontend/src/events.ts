@@ -18,6 +18,7 @@ export type JoinRoomEvent = ResponseEvent & {
   title: string;
   quotaEnabled: boolean;
   editMode: EditMode;
+  ignoredVariants: { [id: string]: true };
 };
 
 export type AllocateVariantEvent = ResponseEvent & Partial<Variant>;
@@ -36,6 +37,12 @@ export type UpdateVariantEvent = Partial<Variant> & {
   event: string;
   error?: string;
   uuid: string;
+};
+
+export type RemoveVariantEvent = {
+  event: string;
+  error?: string;
+  id: string;
 };
 
 export type SettingsTitleEvent = ResponseEvent & { value: string };
