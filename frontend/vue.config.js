@@ -15,7 +15,7 @@ module.exports = {
         config: require('./fontello.config.json'),
         fonts: ['woff', 'woff2', 'ttf'],
         output: {
-          css: 'css/[name].[ext]',
+          css: 'css/[name].css',
           font: 'fonts/[name].[ext]',
         },
       }),
