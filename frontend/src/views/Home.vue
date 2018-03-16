@@ -1,17 +1,27 @@
 <template>
   <div>
-    <section class="hero is-medium intro">
+    <section class="hero is-large intro">
       <div class="hero-body">
         <div class="container">
-          <div class="intro-columns">
-            <div class="intro-column is-content">
-              <div class="intro-content">
-                <h1 class="title">
-                  Ranking things made easy.
-                </h1>
+          <div class="columns is-mobile is-centered">
+            <div class="column is-quarter is-narrow">
+              <div class="content">
+                <div class="field">
+                  <h1 class="title">
+                    Ranking things made easy.
+                  </h1>
+                  <h4 class="subtitle">
+                    Rank a list of items by comparing them 1 vs 1
+                  </h4>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <input class="input is-rounded is-large" type="text" placeholder="Type your question here">
+                  </div>
+                </div>
                 <nav class="buttons">
-                  <a class="button is-primary is-large is-red" @click="createRoom">Create Poll</a>
-                  <a class="button is-large">How it works</a>
+                  <a class="button is-primary is-large is-red is-rounded" @click="createRoom">Create Poll</a>
+                  <a class="button is-large is-rounded">Try with sample data</a>
                 </nav>
               </div>
             </div>

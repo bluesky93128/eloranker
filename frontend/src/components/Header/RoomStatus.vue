@@ -51,13 +51,17 @@
                 </h1>
 
                 <input type="checkbox" v-model="exposeSecret" v-if="isAdmin">
-                <div class="field">
-                  <div class="control has-icons-right">
+                <div class="field has-addons">
+                  <p class="control">
                     <input class="input" type="text" readonly :value="shareableLink" ref="shareableLink">
-                    <span class="icon is-small is-right" @click="copyLink">
-                      <i class="fas fa-clipboard"></i>
-                    </span>
-                  </div>
+                  </p>
+                  <p class="control">
+                    <a class="button is-warning">
+                      <span class="icon is-small is-right" @click="copyLink">
+                        <i class="fas fa-clipboard"></i>
+                      </span>
+                    </a>
+                  </p>
                 </div>
 
                 <div class="field">
