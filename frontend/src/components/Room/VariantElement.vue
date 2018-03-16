@@ -15,13 +15,13 @@
             <div class="dropdown-content">
               <a class="dropdown-item" @click="findImage">
                 <span class="icon">
-                  <i class="icon-s-gplus"></i>
+                  <i class="icon-google"></i>
                 </span>
                 From Google Images
               </a>
               <a class="dropdown-item" @click="openImageSelector">
                 <span class="icon">
-                  <i class="icon-picture-1"></i>
+                  <i class="icon-picture"></i>
                 </span>
                 From file/URL
               </a>

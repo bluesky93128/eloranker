@@ -29,6 +29,18 @@
       "css": "picture",
       "code": 59392,
       "src": "fontawesome"
+    },
+    {
+      "uid": "b95cfc96d48a72dd665e0ab109880b5e",
+      "css": "clipboard",
+      "code": 59393,
+      "src": "entypo"
+    },
+    {
+      "uid": "559647a6f430b3aeadbecd67194451dd",
+      "css": "menu",
+      "code": 61641,
+      "src": "fontawesome"
     }
   ]
 }
