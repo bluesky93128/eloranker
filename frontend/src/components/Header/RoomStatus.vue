@@ -27,7 +27,7 @@
                     :to="{ name: 'room-list', params: $route.params }"
                   >
                     <span class="icon is-small">
-                      <i class="icon-edit"></i>
+                      <i class="icon-pencil-squared"></i>
                     </span>
                     <span>
                       Edit
