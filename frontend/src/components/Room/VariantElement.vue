@@ -8,27 +8,27 @@
         <div class="card-header-icon dropdown is-hoverable">
           <div class="dropdown-trigger">
             <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
+              <i class="icon-menu"></i>
             </span>
           </div>
           <div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
               <a class="dropdown-item" @click="findImage">
                 <span class="icon">
-                  <i class="fab fa-google"></i>
+                  <i class="icon-s-gplus"></i>
                 </span>
                 From Google Images
               </a>
               <a class="dropdown-item" @click="openImageSelector">
                 <span class="icon">
-                  <i class="fas fa-image"></i>
+                  <i class="icon-picture-1"></i>
                 </span>
                 From file/URL
               </a>
               <hr class="dropdown-divider">
               <a class="dropdown-item">
                 <span class="icon">
-                  <i class="fas fa-trash"></i>
+                  <i class="icon-trash"></i>
                 </span>
                 Delete
               </a>

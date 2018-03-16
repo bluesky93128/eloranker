@@ -27,7 +27,7 @@
                     :to="{ name: 'room-list', params: $route.params }"
                   >
                     <span class="icon is-small">
-                      <i class="fas fa-edit"></i>
+                      <i class="icon-edit"></i>
                     </span>
                     <span>
                       Edit
@@ -58,7 +58,7 @@
                   <p class="control">
                     <a class="button is-warning">
                       <span class="icon is-small is-right" @click="copyLink">
-                        <i class="fas fa-clipboard"></i>
+                        <i class="icon-clipboard"></i>
                       </span>
                     </a>
                   </p>
