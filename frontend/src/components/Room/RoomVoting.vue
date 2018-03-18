@@ -1,11 +1,17 @@
 <template>
   <div>
     <div class="columns is-mobile is-centered">
-      <VariantElement v-if="pair" voting :variant="pairVariants[0]" @click.native="vote(pair[0])" />
+      <transition name="fade-variant-left" mode="out-in">
+        <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid" @click.native="vote(pair[0])" />
+      </transition>
       <div class="column is-one-third">
-        <button class="button" @click="nextPair">SKIP</button>
+        <div class="buttons has-addons is-centered">
+          <button class="button is-centered" @click="nextPair">SKIP</button>
+        </div>
       </div>
-      <VariantElement v-if="pair" voting :variant="pairVariants[1]" @click.native="vote(pair[1])" />
+      <transition name="fade-variant" mode="out-in">
+        <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid" @click.native="vote(pair[1])" />
+      </transition>
     </div>
   </div>
 </template>
@@ -63,5 +69,4 @@ export default class RoomVoting extends Vue {
 </script>
 
 <style lang="scss" module>
-
 </style>

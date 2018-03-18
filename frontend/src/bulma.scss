@@ -46,6 +46,25 @@ $input-focus-box-shadow-size: 0;
     }
 }
 
+.fade-variant-enter-active,
+.fade-variant-leave-active,
+.fade-variant-left-enter-active,
+.fade-variant-left-leave-active {
+  transition: all 0.15s;
+}
+
+.fade-variant-enter,
+.fade-variant-leave-to {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.fade-variant-left-enter,
+.fade-variant-left-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
 .button.is-red,
 .hero.is-red {
     background-color: #df0024;
