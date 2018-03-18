@@ -3,7 +3,7 @@
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">
-          {{ (number + 1) + ". " + variant.text }}
+          {{ (number > 0 ? (number) + ". " : "") + variant.text }}
         </p>
         <div class="card-header-icon dropdown is-hoverable">
           <div class="dropdown-trigger">
@@ -26,7 +26,7 @@
                 From file/URL
               </a>
               <hr class="dropdown-divider">
-              <a class="dropdown-item">
+              <a class="dropdown-item" @click="remove">
                 <span class="icon">
                   <i class="icon-trash"></i>
                 </span>
@@ -50,7 +50,7 @@
             <input
               ref="textInput"
               class="input"
-              :class="[$style.textInput, { 'is-static': voting }]"
+              :class="[{ 'is-static': voting }]"
               v-model="variant.text"
               @input="onTextInput"
               :list="autocompleteId"
@@ -67,7 +67,6 @@
               ref="imageInput"
               v-if="!voting"
               class="input"
-              :class="$style.imageInput"
               v-model="variant.image"
               @input="pushVariantUpdate"
 
@@ -84,7 +83,6 @@
         <div class="field is-grouped">
           <button
             class="button"
-            v-if="!isNew"
             :disabled="!isIgnored && !canIgnoreVariant"
             @click="setIgnored(!isIgnored)"
           >{{ isIgnored ? 'UNIGNORE' : 'IGNORE' }}</button>
@@ -237,11 +235,4 @@ export default class VariantElement extends Vue {
 </script>
 
 <style lang="scss" module>
-.image {
-  transition: 0.3s all;
-}
-
-.image:hover {
-  transform: scaleX(1.5);
-}
 </style>

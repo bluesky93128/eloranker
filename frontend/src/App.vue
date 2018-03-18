@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <Header />
-    <div v-if="joined">
-      <RoomStatus :class="$style.roomStatus" />
-    </div>
-    <section class="section">
-      <div class="container">
-        <router-view />
-      </div>
-    </section>
-    <div v-if="error" :class="$style.errorOverlay">
-      <div :class="$style.errorOverlayMessage">{{ error }}</div>
+    <router-view />
+    <div v-if="error" class="container">
+      <article class="message is-danger">
+        <div class="message-header">
+          <p>Error</p>
+        </div>
+        <div class="message-body">
+          {{ error }}
+        </div>
+      </article>
     </div>
     <Footer />
   </div>
@@ -18,16 +18,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { State } from 'vuex-class';
 import connection from '@/connection';
 import Header from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
-import RoomStatus from '@/components/Header/RoomStatus.vue';
 
-@Component({ components: { Header, Footer, RoomStatus } })
+@Component({ components: { Header, Footer } })
 export default class App extends Vue {
-  @State joined!: boolean;
-
   socketClosed = false;
 
   mounted() {

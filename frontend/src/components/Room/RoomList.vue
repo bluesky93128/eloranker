@@ -1,16 +1,15 @@
 <template>
-  <div :class="['columns', 'is-multiline', 'is-mobile']">
+  <div class="columns is-multiline is-mobile">
     <!-- <div :class="['tile', 'is-5', 'is-parent']"> -->
-      <VariantElement
-        ref="elements"
-        v-for="(variant, index) in sortedVariants"
-        :number="index"
-        :key="variant.uuid"
-        :variant="variant"
-      />
-
-      <VariantElement @updateSelection="updateSelection" :number="sortedVariants.length" />
-      <VariantElement v-if="sortedVariants.length < 1" @updateSelection="updateSelection" :number="sortedVariants.length+1" />
+    <VariantElement @updateSelection="updateSelection" :number="0" />
+    <!-- <VariantElement v-if="sortedVariants.length < 1" @updateSelection="updateSelection" :number="sortedVariants.length+1" /> -->
+    <VariantElement
+      ref="elements"
+      v-for="(variant, index) in sortedVariants"
+      :number="index + 1"
+      :key="variant.uuid"
+      :variant="variant"
+    />
     <!-- </div> -->
   </div>
 </template>

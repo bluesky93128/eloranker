@@ -16,7 +16,7 @@
 
                 <div class="field">
                   <div class="control">
-                    <input :class="['input', 'is-rounded', 'is-large']" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin" placeholder="Poll Name">
+                    <input class="input is-rounded is-large" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin" placeholder="Poll Name">
                   </div>
                 </div>
 

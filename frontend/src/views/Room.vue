@@ -1,13 +1,21 @@
 <template>
-  <router-view v-if="joined" />
+  <div v-if="joined">
+    <RoomStatus />
+    <div class="section">
+      <div class="container">
+        <router-view/>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Getter } from 'vuex-class';
 import { Route } from 'vue-router/types/router';
+import RoomStatus from '@/components/Header/RoomStatus.vue';
 
-@Component
+@Component({ components: { RoomStatus } })
 export default class RoomList extends Vue {
   @State roomName!: string;
   @State roomSecret!: string;
