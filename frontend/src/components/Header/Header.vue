@@ -11,6 +11,29 @@
           <span></span>
         </span>
       </div>
+
+      <!-- <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="">
+            Home
+          </a>
+        </div>
+      </div> -->
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="field is-grouped">
+            <p class="control">
+              <a class="button is-primary is-red" href="">
+                <span class="icon">
+                  <i class="icon-pencil-squared icon-5x"></i>
+                </span>
+                <span>New Poll</span>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 </template>

@@ -41,6 +41,18 @@
       "css": "menu",
       "code": 61641,
       "src": "fontawesome"
+    },
+    {
+      "uid": "627abcdb627cb1789e009c08e2678ef9",
+      "css": "twitter",
+      "code": 61593,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "4743b088aa95d6f3b6b990e770d3b647",
+      "css": "facebook-squared",
+      "code": 62216,
+      "src": "fontawesome"
     }
   ]
 }

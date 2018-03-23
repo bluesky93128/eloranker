@@ -1,18 +1,50 @@
 <template>
   <div>
-    <div class="columns is-mobile is-centered">
-      <transition name="fade-variant-left" mode="out-in">
-        <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid" @click.native="vote(pair[0])" />
-      </transition>
-      <div class="column is-one-third">
-        <div class="buttons has-addons is-centered">
-          <button class="button is-centered" @click="nextPair">SKIP</button>
+    <div class="section">
+      <div class="container">
+        <div class="columns is-mobile is-centered is-vcentered">
+          <transition name="fade-variant-left" mode="out-in">
+            <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid" @click.native="vote(pair[0])" />
+          </transition>
+          <div class="column is-one-third">
+            <div class="has-text-centered">
+              <p class="title is-1 is-unselectable" id="orLabel">VS</p>
+            </div>
+            <div class="buttons has-addons is-centered">
+              <button class="button is-centered" @click="nextPair">Skip</button>
+            </div>
+          </div>
+          <transition name="fade-variant" mode="out-in">
+            <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid" @click.native="vote(pair[1])" />
+          </transition>
         </div>
       </div>
-      <transition name="fade-variant" mode="out-in">
-        <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid" @click.native="vote(pair[1])" />
-      </transition>
     </div>
+    <!-- <article class="message">
+      <div class="message-header">
+        <p>Hello World</p>
+        <button class="delete" aria-label="delete"></button>
+      </div>
+      <div class="message-body">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+      </div>
+    </article> -->
+    <section class="hero is-primary is-red">
+      <div class="hero-body">
+        <div class="container">
+          <h2 class="title is-2">See the rankings...</h2>
+          <div class="columns is-multiline is-mobile">
+            <VariantElement
+              ref="elements"
+              v-for="(variant, index) in sortedVariants"
+              :number="index + 1"
+              :key="variant.uuid"
+              :variant="variant"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -26,6 +58,7 @@ import VariantElement from './VariantElement.vue';
 @Component({ components: { VariantElement } })
 export default class RoomVoting extends Vue {
   @State variants!: Variant[];
+  @Getter sortedVariants!: Variant[];
   @Getter findVariant!: (id: string) => Variant | undefined;
   pair: [string, string] | null = null;
 

@@ -13,6 +13,10 @@
           </div>
           <div class="dropdown-menu" id="dropdown-menu4" role="menu">
             <div class="dropdown-content">
+              <a class="dropdown-item">
+                {{ 'ELO: ' + variant.rating }}
+              </a>
+              <hr class="dropdown-divider">
               <a class="dropdown-item" @click="findImage">
                 <span class="icon">
                   <i class="icon-google"></i>
@@ -26,6 +30,12 @@
                 From file/URL
               </a>
               <hr class="dropdown-divider">
+              <a v-if="voting" class="dropdown-item" @click="setIgnored(!isIgnored)" :disabled="!isIgnored && !canIgnoreVariant">
+                <span class="icon">
+
+                </span>
+                {{ isIgnored ? 'Unignore' : 'Ignore' }}
+              </a>
               <a class="dropdown-item" @click="remove">
                 <span class="icon">
                   <i class="icon-trash"></i>
@@ -80,15 +90,6 @@
           <option v-for="text in autocomplete" :key="text" :value="text" />
         </datalist>
 
-        <div class="field is-grouped">
-          <button
-            class="button"
-            :disabled="!isIgnored && !canIgnoreVariant"
-            @click="setIgnored(!isIgnored)"
-          >{{ isIgnored ? 'UNIGNORE' : 'IGNORE' }}</button>
-        </div>
-
-        <!-- <div v-if="!voting && !isNew">{{ variant.rating }}</div> -->
         <SelectImage v-show="selectingImage" @close="closeImageSelector"/>
       </div>
     </div>
