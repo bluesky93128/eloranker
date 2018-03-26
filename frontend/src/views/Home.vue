@@ -1,10 +1,10 @@
 <template>
   <div>
-    <section class="hero is-large intro">
+    <section class="hero is-large">
       <div class="hero-body">
         <div class="container">
-          <div class="columns is-mobile is-centered">
-            <div class="column is-quarter is-narrow">
+          <div class="columns is-vcentered">
+            <div class="column is-5 is-narrow">
               <div class="content">
                 <div class="field">
                   <h1 class="title">

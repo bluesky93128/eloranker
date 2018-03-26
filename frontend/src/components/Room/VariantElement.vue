@@ -5,7 +5,7 @@
         <p class="card-header-title">
           {{ (number > 0 ? (number) + ". " : "") + variant.text }}
         </p>
-        <div class="card-header-icon dropdown is-hoverable">
+        <div v-if="!voting" class="card-header-icon dropdown is-right is-hoverable">
           <div class="dropdown-trigger">
             <span class="icon">
               <i class="icon-menu"></i>
@@ -44,6 +44,9 @@
               </a>
             </div>
           </div>
+        </div>
+        <div v-else class="card-header-icon">
+          <span class="tag is-info">{{ 'ELO: ' + variant.rating }}</span>
         </div>
       </header>
       <div class="card-image">

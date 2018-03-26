@@ -1,7 +1,7 @@
 <template>
   <div v-if="joined">
     <RoomStatus />
-    <router-view/>
+    <router-view />
   </div>
 </template>
 

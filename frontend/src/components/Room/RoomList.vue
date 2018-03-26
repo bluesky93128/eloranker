@@ -1,18 +1,22 @@
 <template>
-  <div class="columns is-mobile">
-    <div :class="['column', 'is-four-fifths']">
-      <div class="columns is-multiline is-mobile">
-        <VariantElement @updateSelection="updateSelection" :number="0" />
-        <VariantElement
-          ref="elements"
-          v-for="(variant, index) in sortedVariants"
-          :number="index + 1"
-          :key="variant.uuid"
-          :variant="variant"
-        />
+  <div class="section">
+    <div class="container">
+      <div class="columns">
+        <div :class="['column', 'is-four-fifths']">
+          <div class="columns is-multiline">
+            <VariantElement @updateSelection="updateSelection" :number="0" />
+            <VariantElement
+              ref="elements"
+              v-for="(variant, index) in sortedVariants"
+              :number="index + 1"
+              :key="variant.uuid"
+              :variant="variant"
+            />
+          </div>
+        </div>
+        <RoomSettings/>
       </div>
     </div>
-    <RoomSettings />
   </div>
 </template>
 

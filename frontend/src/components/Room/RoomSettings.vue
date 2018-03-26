@@ -61,21 +61,6 @@ export default class RoomSettings extends Vue {
     this.$store.commit('setSortingOrder', value);
   }
 
-  get shareableLink() {
-    const shouldExposeSecret = this.exposeSecret && this.roomSecret;
-    const roomId = `${this.roomName}${shouldExposeSecret ? `!${this.roomSecret}` : ''}`;
-
-    return `${window.location.origin}/${roomId}`;
-  }
-
-  copyLink() {
-    const el = this.$refs.shareableLink;
-
-    el.select();
-    document.execCommand('copy');
-    window.getSelection().empty();
-  }
-
   @State roomQuotaEnabled!: boolean;
   onQuotaChange(event: Event & { target: HTMLInputElement }) {
     const quotaEnabled = event.target.checked;

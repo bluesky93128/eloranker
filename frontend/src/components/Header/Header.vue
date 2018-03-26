@@ -20,7 +20,7 @@
         </div>
       </div> -->
 
-      <div class="navbar-end">
+      <div class="navbar-end is-hidden-mobile">
         <div class="navbar-item">
           <div class="field is-grouped">
             <p class="control">

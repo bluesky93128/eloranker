@@ -2,7 +2,7 @@
   <div>
     <div class="section">
       <div class="container">
-        <div class="columns is-mobile is-centered is-vcentered">
+        <div class="columns is-centered is-vcentered">
           <transition name="fade-variant-left" mode="out-in">
             <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid" @click.native="vote(pair[0])" />
           </transition>
@@ -33,8 +33,9 @@
       <div class="hero-body">
         <div class="container">
           <h2 class="title is-2">See the rankings...</h2>
-          <div class="columns is-multiline is-mobile">
+          <div class="columns is-multiline">
             <VariantElement
+              voting
               ref="elements"
               v-for="(variant, index) in sortedVariants"
               :number="index + 1"
@@ -51,7 +52,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Getter } from 'vuex-class';
-import { Variant } from '@/room';
+import { Variant, SortingOrder } from '@/room';
 import connection from '@/connection';
 import VariantElement from './VariantElement.vue';
 
@@ -69,6 +70,7 @@ export default class RoomVoting extends Vue {
 
   mounted() {
     this.nextPair();
+    this.$store.commit('setSortingOrder', SortingOrder.RATING);
     connection.on('voting:get', ({ variants, error }) => {
       if (error) {
         if (error === 'not enough variants to vote') {
