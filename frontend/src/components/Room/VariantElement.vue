@@ -1,101 +1,101 @@
 <template>
   <div :class="['column', voting ? 'is-one-third' : 'is-one-quarter']">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          {{ (number > 0 ? (number) + ". " : "") + variant.text }}
-        </p>
-        <div v-if="!voting" class="card-header-icon dropdown is-right is-hoverable">
-          <div class="dropdown-trigger">
-            <span class="icon">
-              <i class="icon-menu"></i>
-            </span>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu4" role="menu">
-            <div class="dropdown-content">
-              <a class="dropdown-item">
-                {{ 'ELO: ' + variant.rating }}
-              </a>
-              <hr class="dropdown-divider">
-              <a class="dropdown-item" @click="findImage">
-                <span class="icon">
-                  <i class="icon-google"></i>
-                </span>
-                From Google Images
-              </a>
-              <a class="dropdown-item" @click="openImageSelector">
-                <span class="icon">
-                  <i class="icon-picture"></i>
-                </span>
-                From file/URL
-              </a>
-              <hr class="dropdown-divider">
-              <a v-if="voting" class="dropdown-item" @click="setIgnored(!isIgnored)" :disabled="!isIgnored && !canIgnoreVariant">
-                <span class="icon">
-
-                </span>
-                {{ isIgnored ? 'Unignore' : 'Ignore' }}
-              </a>
-              <a class="dropdown-item" @click="remove">
-                <span class="icon">
-                  <i class="icon-trash"></i>
-                </span>
-                Delete
-              </a>
+    <transition appear appear-class="appear-class" appear-active-class="appear-active-class">
+      <div class="card">
+        <header class="card-header">
+          <p v-if="voting || listing" class="card-header-title">
+            {{ (number > 0 ? (number) + ". " : "") + variant.text }}
+          </p>
+          <div v-else class="card-header-title">
+            <div :class="['control', { 'is-loading': waitingForImage }]">
+              <input
+                ref="textInput"
+                class="input"
+                :class="[{ 'is-static': voting }]"
+                v-model="variant.text"
+                @input="onTextInput"
+                :list="autocompleteId"
+                maxlength="100"
+                placeholder="Option Name"
+                :readonly="!hasEditPermissions"
+              >
             </div>
           </div>
-        </div>
-        <div v-else class="card-header-icon">
-          <span class="tag is-info">{{ 'ELO: ' + variant.rating }}</span>
-        </div>
-      </header>
-      <div class="card-image">
-        <figure class="image is-4by3">
-          <img
-            :src="variant.image || fallbackImage"
-            @error="$event.target.src = fallbackImage"
-          >
-        </figure>
-      </div>
-      <div v-if="!voting" class="card-content">
-        <div class="field">
-          <div :class="['control', { 'is-loading': waitingForImage }]">
-            <input
-              ref="textInput"
-              class="input"
-              :class="[{ 'is-static': voting }]"
-              v-model="variant.text"
-              @input="onTextInput"
-              :list="autocompleteId"
-              maxlength="100"
-              placeholder="Option Name"
-              :readonly="!hasEditPermissions"
-            >
+
+          <div v-if="listing" class="card-header-icon">
+            <span class="tag is-info">{{ 'ELO: ' + variant.rating }}</span>
           </div>
-        </div>
-        <div class="field">
-          <div :class="['control']">
-            <input
-              type="hidden"
-              ref="imageInput"
-              v-if="!voting"
-              class="input"
-              v-model="variant.image"
-              @input="pushVariantUpdate"
-
-              :readonly="!hasEditPermissions"
-            >
+          <div v-else-if="voting" class="card-header-icon">
+            <div :class="['button', { 'is-danger' : confirmingIgnore === true && !isIgnored }, { 'is-info' : isIgnored } ]" @click="setIgnored(!isIgnored)" :disabled="!isIgnored && !canIgnoreVariant">{{ isIgnored ? 'Unignore' : 'Ignore' }}</div>
           </div>
+          <div v-else-if="!voting && !listing" class="card-header-icon dropdown is-right is-hoverable">
+            <div class="dropdown-trigger">
+              <span class="icon">
+                <i class="icon-menu"></i>
+              </span>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+              <div class="dropdown-content">
+                <a class="dropdown-item">
+                  {{ 'ELO: ' + variant.rating }}
+                </a>
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" @click="findImage">
+                  <span class="icon">
+                    <i class="icon-google"></i>
+                  </span>
+                  From Google Images
+                </a>
+                <a class="dropdown-item" @click="openImageSelector">
+                  <span class="icon">
+                    <i class="icon-picture"></i>
+                  </span>
+                  From file/URL
+                </a>
+                <hr class="dropdown-divider">
+                <a class="dropdown-item" @click="remove">
+                  <span class="icon">
+                    <i class="icon-trash"></i>
+                  </span>
+                  Delete
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img
+              :src="variant.image || fallbackImage"
+              @error="$event.target.src = fallbackImage"
+            >
+          </figure>
+          <slot></slot>
         </div>
-        <!-- TODO: Serverside maxlength validation -->
+        <div v-if="false" class="card-content">
+          <div class="field">
+            <div :class="['control']">
+              <input
+                type="hidden"
+                ref="imageInput"
+                v-if="!voting"
+                class="input"
+                v-model="variant.image"
+                @input="pushVariantUpdate"
 
-        <datalist :id="autocompleteId">
-          <option v-for="text in autocomplete" :key="text" :value="text" />
-        </datalist>
+                :readonly="!hasEditPermissions"
+              >
+            </div>
+          </div>
+          <!-- TODO: Serverside maxlength validation -->
 
+          <datalist :id="autocompleteId">
+            <option v-for="text in autocomplete" :key="text" :value="text" />
+          </datalist>
+        </div>
         <SelectImage v-show="selectingImage" @close="closeImageSelector"/>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -122,6 +122,9 @@ export default class VariantElement extends Vue {
   @Prop({ type: Boolean, default: false })
   voting!: boolean;
 
+  @Prop({ type: Boolean, default: false })
+  listing!: boolean;
+
   @Prop({ type: Number, default: 0 })
   number!: number;
 
@@ -130,12 +133,18 @@ export default class VariantElement extends Vue {
   waitingForAllocation = false;
   waitingForImage = false;
   selectingImage = false;
+  confirmingIgnore = false;
 
   get isIgnored() {
     return this.$store.getters.isIgnoredVariant(this.variant.uuid);
   }
 
   setIgnored(ignored: boolean) {
+    if (this.confirmingIgnore === false) {
+      this.confirmingIgnore = true;
+      return;
+    }
+    console.log("asdasd");
     const id = this.variant.uuid;
     this.$store.commit('setVariantIgnored', { id, ignored });
     connection.setVariantIgnored(id, ignored);

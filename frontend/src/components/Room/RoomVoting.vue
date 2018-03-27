@@ -4,10 +4,13 @@
       <div class="container">
         <div class="columns is-centered is-vcentered">
           <transition name="fade-variant-left" mode="out-in">
-            <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid" @click.native="vote(pair[0])" />
+            <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid">
+              <div class="is-overlay is-4by3" @click="vote(pair[0])">
+              </div>
+            </VariantElement>
           </transition>
           <div class="column is-one-third">
-            <div class="has-text-centered">
+            <div class="has-text-centered is-hidden-mobile">
               <p class="title is-1 is-unselectable" id="orLabel">VS</p>
             </div>
             <div class="buttons has-addons is-centered">
@@ -15,7 +18,10 @@
             </div>
           </div>
           <transition name="fade-variant" mode="out-in">
-            <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid" @click.native="vote(pair[1])" />
+            <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid">
+              <div class="is-overlay is-4by3" @click="vote(pair[1])">
+              </div>
+            </VariantElement>
           </transition>
         </div>
       </div>
@@ -35,7 +41,7 @@
           <h2 class="title is-2">See the rankings...</h2>
           <div class="columns is-multiline">
             <VariantElement
-              voting
+              listing
               ref="elements"
               v-for="(variant, index) in sortedVariants"
               :number="index + 1"

@@ -2,88 +2,33 @@
   <section class="hero is-primary is-red">
     <div class="hero-body">
       <div class="container">
-        <div class="columns">
-          <div class="column is-two-thirds">
-            <!-- <div class="content"> -->
-            <div v-if="isAdmin">
-              <!-- <h2 class="title is-2">
-                Creating new poll
-              </h2> -->
-              <!-- <h2 class="title is-2">{{ roomTitle }}</h2> -->
-              <div class="field has-addons">
+        <div class="columns is-centered">
+          <div class="column is-half has-text-centered">
+            <div v-if="isCreating && isAdmin">
+              <div class="field">
                 <div class="control has-icons-right">
-                  <input class="input is-rounded is-large" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin" placeholder="Poll Name">
+                  <input class="input is-rounded is-large" :value="roomTitle" @input="onTitleChange" :disabled="!isAdmin" placeholder="Type poll name here...">
                   <span class="icon is-large is-right">
                     <i class="icon-pencil-squared fa-3x"></i>
                   </span>
                 </div>
-                <!-- <div class="control">
-                  <a class="button is-large is-warning">
-                    <span class="icon is-medium is-right" @click="editName">
-                      <i class="icon-pencil-squared"></i>
-                    </span>
-                  </a>
-                </div> -->
               </div>
-              <h5 class="subtitle is-5">
-                Enter poll name and add minimum of 3 options
+              <h5 v-if="sortedVariants.length < 3" class="subtitle is-5">
+                * You need to add <b>{{ 3 - sortedVariants.length }}</b> more items to start voting
               </h5>
+              <div v-else>
+                <router-link
+                  class="button is-rounded is-large is-warning"
+                  tag="button"
+                  :to="{ name: 'room-voting', params: $route.params }"
+                  :disabled="!canVote"
+                >Start voting</router-link>
+              </div>
             </div>
             <div v-else>
-              <p class="title is-1">{{ roomTitle }}</p>
+              <p :class="['title', 'is-1']">{{ roomTitle }}</p>
               <p class="subtitle is-5">
                 Rank a list of items by comparing them 1 vs 1
-              </p>
-            </div>
-            <!-- <div class="field is-grouped">
-              <router-link
-                class="control button is-rounded is-large is-warning"
-                tag="button"
-                :to="{ name: 'room-list', params: $route.params }"
-              >
-                <span class="icon is-small">
-                  <i class="icon-pencil-squared"></i>
-                </span>
-                <span>
-                  Edit
-                </span>
-              </router-link>
-              <router-link
-                class="control button is-rounded is-large"
-                tag="button"
-                :to="{ name: 'room-voting', params: $route.params }"
-                :disabled="!canVote"
-              >   Start voting   </router-link>
-            </div> -->
-            <!-- </div> -->
-          </div>
-          <div class="column is-third">
-            <p class="title is-1">Share</p>
-            <input type="checkbox" v-model="exposeSecret" v-if="isAdmin" hidden>
-            <div class="field has-addons">
-              <p class="control">
-                <input class="input" type="text" readonly :value="shareableLink" ref="shareableLink">
-              </p>
-              <p class="control">
-                <a class="button is-warning">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-clipboard"></i>
-                  </span>
-                </a>
-              </p>
-              <p class="control">
-                <a class="button is-info">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-twitter"></i>
-                  </span>
-                </a>
-              </p>
-              <p class="control">
-                <a class="button is-link">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-facebook-squared"></i>
-                  </span>
-                </a>
               </p>
             </div>
           </div>
@@ -96,6 +41,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Getter, State } from 'vuex-class';
+import { Variant } from '@/room';
 import connection from '@/connection';
 import { EditMode } from '@/room';
 
@@ -106,9 +52,14 @@ export default class RoomStatus extends Vue {
   @State roomSecret!: string;
   @State clientNumber!: number;
   @Getter canVote!: boolean;
+  @Getter sortedVariants!: Variant[];
   @State isAdmin!: boolean;
   exposeSecret = false;
   editingName = false;
+
+  get isCreating() {
+    return this.$route.name == 'room-list';
+  }
 
   get shareableLink() {
     const shouldExposeSecret = this.exposeSecret && this.roomSecret;
@@ -150,6 +101,10 @@ export default class RoomStatus extends Vue {
 </script>
 
 <style lang="scss" module>
+.question {
+  font-size: 6rem;
+}
+
 .shareableLink {
   width: 400px;
 }

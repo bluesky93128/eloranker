@@ -1,37 +1,80 @@
 <template>
   <div class="column is-one-quarter">
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          Settings
-        </p>
-      </header>
-      <div v-if="!voting" class="card-content">
-        <div class="field">
-          <div class="control">
-            <div class="select">
-              <select v-model="sortingOrder">
-                <option :value="SortingOrder.DATE">Sort by Date</option>
-                <option :value="SortingOrder.RATING">Sort by Rating</option>
-              </select>
+    <div class="columns is-multiline">
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Share
+            </p>
+          </header>
+          <div class="card-content">
+            <input type="checkbox" v-model="exposeSecret" v-if="isAdmin" hidden>
+            <div class="field has-addons">
+              <p class="control">
+                <input class="input" type="text" readonly :value="shareableLink" ref="shareableLink">
+              </p>
+              <p class="control">
+                <a class="button is-warning">
+                  <span class="icon is-small is-right" @click="copyLink">
+                    <i class="icon-clipboard"></i>
+                  </span>
+                </a>
+              </p>
+              <p class="control">
+                <a class="button is-info">
+                  <span class="icon is-small is-right" @click="copyLink">
+                    <i class="icon-twitter"></i>
+                  </span>
+                </a>
+              </p>
+              <p class="control">
+                <a class="button is-link">
+                  <span class="icon is-small is-right" @click="copyLink">
+                    <i class="icon-facebook-squared"></i>
+                  </span>
+                </a>
+              </p>
             </div>
           </div>
         </div>
+      </div>
+      <div class="column">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              Settings
+            </p>
+            <div class="card-header-icon">
+              <span class="tag is-info">Connected Clients: {{ clientNumber }}</span>
+            </div>
+          </header>
+          <div v-if="!voting" class="card-content">
+            <div class="field">
+              <div class="control">
+                <div class="select">
+                  <select v-model="sortingOrder">
+                    <option :value="SortingOrder.DATE">Sort by Date</option>
+                    <option :value="SortingOrder.RATING">Sort by Rating</option>
+                  </select>
+                </div>
+              </div>
+            </div>
 
-        <input type="checkbox" :checked="roomQuotaEnabled" @change="onQuotaChange" :disabled="!isAdmin" hidden>
-        <div class="field">
-          <div class="control">
-            <div class="select">
-              <select :value="roomEditMode" @input="onEditModeChange" :disabled="!isAdmin">
-                <option :value="EditMode.Trust">Trust Mode</option>
-                <option :value="EditMode.Normal">Normal Mode</option>
-                <option :value="EditMode.Restricted">Restricted Mode</option>
-              </select>
+            <input type="checkbox" :checked="roomQuotaEnabled" @change="onQuotaChange" :disabled="!isAdmin" hidden>
+            <div class="field">
+              <div class="control">
+                <div class="select">
+                  <select :value="roomEditMode" @input="onEditModeChange" :disabled="!isAdmin">
+                    <option :value="EditMode.Trust">Trust Mode</option>
+                    <option :value="EditMode.Normal">Normal Mode</option>
+                    <option :value="EditMode.Restricted">Restricted Mode</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <h5 class="subtitle">Connected Clients: {{ clientNumber }}</h5>
       </div>
     </div>
   </div>
@@ -52,6 +95,21 @@ export default class RoomSettings extends Vue {
   @Getter canVote!: boolean;
   @State isAdmin!: boolean;
   exposeSecret = false;
+
+  get shareableLink() {
+    const shouldExposeSecret = this.exposeSecret && this.roomSecret;
+    const roomId = `${this.roomName}${shouldExposeSecret ? `!${this.roomSecret}` : ''}`;
+
+    return `${window.location.origin}/${roomId}`;
+  }
+
+  copyLink() {
+    const el = this.$refs.shareableLink;
+
+    el.select();
+    document.execCommand('copy');
+    window.getSelection().empty();
+  }
 
   SortingOrder = SortingOrder;
   get sortingOrder() {
