@@ -16,7 +16,12 @@
                 </div>
                 <div class="field">
                   <div class="control">
-                    <input class="input is-rounded is-large" type="text" placeholder="Type your question here">
+                    <input
+                      class="input is-rounded is-large"
+                      type="text"
+                      placeholder="Type your question here"
+                      v-model="roomTitle"
+                    >
                   </div>
                 </div>
                 <nav class="buttons">
@@ -38,9 +43,13 @@ import connection from '@/connection';
 
 @Component
 export default class Home extends Vue {
+  roomTitle!: string;
+
   async createRoom() {
+    const roomTitle = this.roomTitle;
+    this.roomTitle = '';
     await connection.waitOpen();
-    const { name, secret } = await connection.newRoom();
+    const { name, secret } = await connection.newRoom(roomTitle);
     this.$router.push({ name: 'room-list', params: { roomId: `${name}!${secret}` } });
   }
 }

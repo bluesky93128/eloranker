@@ -88,8 +88,8 @@ export class Connection extends EventEmitter {
     });
   }
 
-  public newRoom() {
-    this.send('room:new');
+  public newRoom(title: string) {
+    this.send('room:new', { title });
     return new Promise<events.NewRoomEvent>((resolve, reject) =>
       this.once(
         'room:new',

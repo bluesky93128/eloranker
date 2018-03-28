@@ -27,6 +27,10 @@ type requestMessage struct {
 	Data json.RawMessage `json:"data"`
 }
 
+type requestMessageDataNewRoom struct {
+	Title string `json:"title"`
+}
+
 type requestMessageDataJoinRoom struct {
 	Name   string `json:"name"`
 	Secret string `json:"secret"`
@@ -54,7 +58,9 @@ type requestMessageDataSubmitVoting struct {
 func (c *Client) handleMessage(request *requestMessage) {
 	switch request.Type {
 	case "room:new":
-		c.newRoom()
+		var message requestMessageDataNewRoom
+		json.Unmarshal(request.Data, &message)
+		c.newRoom(message)
 	case "room:join":
 		var message requestMessageDataJoinRoom
 		json.Unmarshal(request.Data, &message)
@@ -106,12 +112,14 @@ func (c *Client) handleMessage(request *requestMessage) {
 	}
 }
 
-func (c *Client) newRoom() {
+func (c *Client) newRoom(message requestMessageDataNewRoom) {
 	room, secret, err := CreateRandomRoom()
 	if err != nil {
 		c.Error(err.Error(), "room:new")
 		return
 	}
+
+	room.SetTitle(message.Title)
 
 	c.Send(map[string]interface{}{
 		"event":  "room:new",
