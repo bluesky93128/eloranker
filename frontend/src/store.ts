@@ -55,7 +55,7 @@ const getters: GetterTree<State, any> = {
     return ignoredVariantsLen * 2 < state.variants.length;
   },
 
-  canVote: state => state.variants.length >= 2,
+  canVote: state => state.variants.length >= 3,
   hasWriteAccess: (state, getters) => (id: string) => {
     switch (state.roomEditMode) {
       case EditMode.Trust:

@@ -45,7 +45,7 @@ func (c *Client) SelectRandomPair() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(possibleVariants) <= 1 {
+	if len(possibleVariants) < 3 {
 		return nil, errors.New("not enough variants to vote")
 	}
 

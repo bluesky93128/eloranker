@@ -13,7 +13,7 @@
                   </span>
                 </div>
               </div>
-              <h5 v-if="this.$store.state.variants.length < 3" class="subtitle is-5">
+              <h5 v-if="!this.$store.getters.canVote" class="subtitle is-5">
                 * You need to add <b>{{ 3 - this.$store.state.variants.length }}</b> more items to start voting
               </h5>
               <div v-else>
