@@ -12,7 +12,7 @@ import { Route } from 'vue-router/types/router';
 import RoomStatus from '@/components/Room/RoomStatus.vue';
 
 @Component({ components: { RoomStatus } })
-export default class RoomList extends Vue {
+export default class Room extends Vue {
   @State roomName!: string;
   @State roomSecret!: string;
   @State joined!: boolean;
