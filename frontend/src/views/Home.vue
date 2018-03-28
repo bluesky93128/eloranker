@@ -43,7 +43,7 @@ import connection from '@/connection';
 
 @Component
 export default class Home extends Vue {
-  roomTitle!: string;
+  roomTitle: string = '';
 
   async createRoom() {
     const roomTitle = this.roomTitle;
