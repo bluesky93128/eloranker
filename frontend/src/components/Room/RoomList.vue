@@ -18,5 +18,5 @@ import VariantList from './VariantList.vue';
 import RoomSettings from './RoomSettings.vue';
 
 @Component({ components: { VariantElement, VariantList, RoomSettings } })
-export default class RoomList extends Vue {}
+export default class RoomEdit extends Vue {}
 </script>
