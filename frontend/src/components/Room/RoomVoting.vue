@@ -38,8 +38,34 @@
     <section class="hero is-primary is-red">
       <div class="hero-body">
         <div class="container">
-          <h2 class="title is-2">See the rankings...</h2>
-          <div class="columns is-multiline">
+          <div class="columns">
+            <div class="column is-half">
+              <div class="field has-text-left">
+                <h2 class="title is-2">
+                  See the results...
+                </h2>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <a class="button is-warning" @click="showList = !showList">
+                    <span class="icon">
+                      <i :class="[showList ? 'icon-eye-off' : 'icon-eye']"></i>
+                    </span>
+                    <span>{{ showList ? 'Hide' : 'Show' }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field has-text-right">
+                <h2 class="title is-2">
+                  Share
+                </h2>
+              </div>
+              <ShareBlock class="is-pulled-right"/>
+            </div>
+          </div>
+          <div v-if="showList" class="columns is-multiline">
             <VariantElement
               listing
               ref="elements"
@@ -61,13 +87,15 @@ import { State, Getter } from 'vuex-class';
 import { Variant, SortingOrder } from '@/room';
 import connection from '@/connection';
 import VariantElement from './VariantElement.vue';
+import ShareBlock from './ShareBlock.vue';
 
-@Component({ components: { VariantElement } })
+@Component({ components: { VariantElement, ShareBlock } })
 export default class RoomVoting extends Vue {
   @State variants!: Variant[];
   @Getter sortedVariants!: Variant[];
   @Getter findVariant!: (id: string) => Variant | undefined;
   pair: [string, string] | null = null;
+  showList = false;
 
   get pairVariants() {
     if (this.pair == null) return [];

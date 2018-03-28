@@ -53,6 +53,18 @@
       "css": "facebook-squared",
       "code": 62216,
       "src": "fontawesome"
+    },
+    {
+      "uid": "c5fd349cbd3d23e4ade333789c29c729",
+      "css": "eye",
+      "code": 59394,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7fd683b2c518ceb9e5fa6757f2276faa",
+      "css": "eye-off",
+      "code": 59395,
+      "src": "fontawesome"
     }
   ]
 }

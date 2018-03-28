@@ -10,32 +10,7 @@
           </header>
           <div class="card-content">
             <input type="checkbox" v-model="exposeSecret" v-if="isAdmin" hidden>
-            <div class="field has-addons">
-              <p class="control">
-                <input class="input" type="text" readonly :value="shareableLink" ref="shareableLink">
-              </p>
-              <p class="control">
-                <a class="button is-warning">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-clipboard"></i>
-                  </span>
-                </a>
-              </p>
-              <p class="control">
-                <a class="button is-info">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-twitter"></i>
-                  </span>
-                </a>
-              </p>
-              <p class="control">
-                <a class="button is-link">
-                  <span class="icon is-small is-right" @click="copyLink">
-                    <i class="icon-facebook-squared"></i>
-                  </span>
-                </a>
-              </p>
-            </div>
+            <ShareBlock/>
           </div>
         </div>
       </div>
@@ -85,8 +60,9 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Getter, State } from 'vuex-class';
 import connection from '@/connection';
 import { EditMode, SortingOrder } from '@/room';
+import ShareBlock from './ShareBlock.vue';
 
-@Component
+@Component({ components: { ShareBlock } })
 export default class RoomSettings extends Vue {
   $refs!: { shareableLink: HTMLInputElement };
   @State roomName!: string;
