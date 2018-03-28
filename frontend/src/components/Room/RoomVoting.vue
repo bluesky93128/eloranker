@@ -49,7 +49,7 @@
                 <div class="control">
                   <a class="button is-warning" @click="showList = !showList">
                     <span class="icon">
-                      <i :class="[showList ? 'icon-eye-off' : 'icon-eye']"></i>
+                      <i :class="showList ? 'icon-eye-off' : 'icon-eye'"></i>
                     </span>
                     <span>{{ showList ? 'Hide' : 'Show' }}</span>
                   </a>

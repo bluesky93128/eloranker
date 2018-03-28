@@ -11,7 +11,7 @@
               <input
                 ref="textInput"
                 class="input"
-                :class="[{ 'is-static': voting }]"
+                :class="{ 'is-static': voting }"
                 v-model="variant.text"
                 @input="onTextInput"
                 :list="autocompleteId"
@@ -26,7 +26,17 @@
             <span class="tag is-info">{{ 'ELO: ' + variant.rating }}</span>
           </div>
           <div v-else-if="voting" class="card-header-icon">
-            <div :class="['button', { 'is-danger' : confirmingIgnore === true && !isIgnored }, { 'is-info' : isIgnored } ]" @click="setIgnored(!isIgnored)" :disabled="!isIgnored && !canIgnoreVariant">{{ isIgnored ? 'Unignore' : 'Ignore' }}</div>
+            <div
+              :class="[
+                'button',
+                { 'is-danger': confirmingIgnore && !isIgnored },
+                { 'is-info': isIgnored },
+              ]"
+              @click="setIgnored(!isIgnored)"
+              :disabled="!isIgnored && !canIgnoreVariant"
+            >
+              {{ isIgnored ? 'Unignore' : 'Ignore' }}
+            </div>
           </div>
           <div v-else-if="!voting && !listing" class="card-header-icon dropdown is-right is-hoverable">
             <div class="dropdown-trigger">
@@ -74,7 +84,7 @@
         </div>
         <div v-if="false" class="card-content">
           <div class="field">
-            <div :class="['control']">
+            <div class="control">
               <input
                 type="hidden"
                 ref="imageInput"

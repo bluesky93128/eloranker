@@ -8,9 +8,9 @@
       <section class="modal-card-body">
         <div class="tabs">
           <ul>
-            <li :class="[{ 'is-active' : optionTab == 0 }]" @click="optionTab = 0"><a>From URL</a></li>
-            <li :class="[{ 'is-active' : optionTab == 1 }]" @click="optionTab = 1"><a>Upload an image</a></li>
-            <li :class="[{ 'is-active' : optionTab == 2 }]" @click="optionTab = 2"><a>Google Images</a></li>
+            <li :class="{ 'is-active' : optionTab == 0 }" @click="optionTab = 0"><a>From URL</a></li>
+            <li :class="{ 'is-active' : optionTab == 1 }" @click="optionTab = 1"><a>Upload an image</a></li>
+            <li :class="{ 'is-active' : optionTab == 2 }" @click="optionTab = 2"><a>Google Images</a></li>
           </ul>
         </div>
         <div v-if="optionTab == 0">

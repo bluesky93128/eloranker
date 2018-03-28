@@ -25,7 +25,7 @@
               </div>
             </div>
             <div v-else>
-              <p :class="['title', 'is-1']">{{ roomTitle }}</p>
+              <p class="title is-1">{{ roomTitle }}</p>
               <p class="subtitle is-5">
                 Rank a list of items by comparing them 1 vs 1
               </p>
