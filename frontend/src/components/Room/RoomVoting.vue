@@ -136,6 +136,3 @@ export default class RoomVoting extends Vue {
   }
 }
 </script>
-
-<style lang="scss" module>
-</style>

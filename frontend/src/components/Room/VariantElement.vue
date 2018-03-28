@@ -246,6 +246,3 @@ export default class VariantElement extends Vue {
   }
 }
 </script>
-
-<style lang="scss" module>
-</style>
