@@ -99,7 +99,7 @@ export default class RoomVoting extends Vue {
     connection.on('voting:get', ({ variants, error }) => {
       if (error) {
         if (error === 'not enough variants to vote') {
-          this.$router.push({ name: 'room-list', params: this.$route.params });
+          this.$router.push({ name: 'room-edit', params: this.$route.params });
           return;
         }
         throw new Error(error);

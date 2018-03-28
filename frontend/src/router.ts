@@ -16,8 +16,8 @@ export default new Router({
       path: '/:roomId',
       component: Room,
       children: [
-        { path: 'edit', component: RoomList, name: 'room-list' },
         { path: '/', component: RoomVoting, name: 'room-voting' },
+        { path: 'edit', component: RoomList, name: 'room-edit' },
       ],
     },
   ],

@@ -54,7 +54,7 @@ export default class RoomStatus extends Vue {
   editingName = false;
 
   get isCreating() {
-    return this.$route.name === 'room-list';
+    return this.$route.name === 'room-edit';
   }
 
   get shareableLink() {

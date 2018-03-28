@@ -50,7 +50,7 @@ export default class Home extends Vue {
     this.roomTitle = '';
     await connection.waitOpen();
     const { name, secret } = await connection.newRoom(roomTitle);
-    this.$router.push({ name: 'room-list', params: { roomId: `${name}!${secret}` } });
+    this.$router.push({ name: 'room-edit', params: { roomId: `${name}!${secret}` } });
   }
 }
 </script>
