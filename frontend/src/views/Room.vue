@@ -32,7 +32,7 @@ export default class Room extends Vue {
       return;
     }
 
-    this.$store.dispatch('joinRoom');
+    await this.$store.dispatch('joinRoom');
   }
 }
 </script>

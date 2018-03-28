@@ -150,6 +150,14 @@ const actions: ActionTree<State, any> = {
       const result = await connection.joinRoom(store.state.roomName, store.state.roomSecret);
       store.commit('loadRoom', result);
       store.commit('setJoined', true);
+
+      if (!store.getters.hasWriteAccess('') && router.currentRoute.name === 'room-edit') {
+        if (store.getters.canVote) {
+          router.push({ name: 'room-voting', params: router.currentRoute.params });
+        } else {
+          router.push({ name: 'home' });
+        }
+      }
     } catch (err) {
       store.commit('setJoined', false);
       if (err.message === 'room not exists') {
@@ -159,6 +167,7 @@ const actions: ActionTree<State, any> = {
       }
     }
   },
+
   async leaveRoom(store) {
     store.commit('resetRoomState');
     await connection.waitOpen();
