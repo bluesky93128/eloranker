@@ -198,7 +198,9 @@ func (c *Client) joinRoom(message requestMessageDataJoinRoom) {
 }
 
 func (c *Client) leaveRoom() {
-	c.room.unregister <- c
+	if c.room != nil {
+		c.room.unregister <- c
+	}
 
 	c.room = nil
 	c.secret = ""
