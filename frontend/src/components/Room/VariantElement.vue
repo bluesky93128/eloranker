@@ -114,9 +114,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 import connection from '@/connection';
 import { Variant, emptyVariant } from '@/room';
-
-import GoogleImageSearch from 'free-google-image-search';
-import googleAutocomplete from '@/google-autocomplete';
+import { googleAutocomplete, yahooImages } from '@/external-api';
 
 import SelectImage from '@/components/Util/SelectImage.vue';
 
@@ -184,7 +182,7 @@ export default class VariantElement extends Vue {
     const variant = this.variant!;
 
     this.waitingForImage = true;
-    const images = await GoogleImageSearch.searchImage(variant.text);
+    const images = await yahooImages(variant.text);
     this.waitingForImage = false;
     if (images.length === 0) return;
 
