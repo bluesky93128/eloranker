@@ -59,6 +59,3 @@ export default class SelectImage extends Vue {
   }
 }
 </script>
-
-<style lang="scss" module>
-</style>

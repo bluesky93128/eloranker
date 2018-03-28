@@ -32,7 +32,3 @@ export default class RoomList extends Vue {
   }
 }
 </script>
-
-<style lang="scss" module>
-
-</style>
