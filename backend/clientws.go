@@ -21,9 +21,6 @@ type Client struct {
 	sent   chan []byte
 	closed bool
 	ip     string
-	// Deprecated: unused now.
-	// TODO: Remove if sessions won't be used anymore
-	session string
 
 	// Room special
 	room   *Room
@@ -125,16 +122,6 @@ func (c *Client) writePump() {
 // ServeWS is the http request handler which creates Client
 func ServeWS(w http.ResponseWriter, r *http.Request) {
 	header := make(http.Header)
-	session, err := r.Cookie("session")
-	if err != nil {
-		session = &http.Cookie{
-			Name:   "session",
-			Value:  generateSession(),
-			Path:   "/",
-			MaxAge: int((time.Hour * 24 * 30 * 12 * 3).Seconds()),
-		}
-		header.Add("Set-Cookie", session.String())
-	}
 
 	ws, err := upgrader.Upgrade(w, r, header)
 	if err != nil {
@@ -146,7 +133,6 @@ func ServeWS(w http.ResponseWriter, r *http.Request) {
 		ws:      ws,
 		sent:    make(chan []byte, 256),
 		ip:      ip,
-		session: session.Value,
 	}
 
 	go client.readPump()
