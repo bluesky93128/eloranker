@@ -108,6 +108,10 @@ export class Connection extends EventEmitter {
     );
   }
 
+  public leaveRoom() {
+    this.send('room:leave');
+  }
+
   public allocateNewVariant() {
     this.send('variant:allocate');
     return new Promise<string>((resolve, reject) =>

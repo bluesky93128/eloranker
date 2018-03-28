@@ -22,6 +22,10 @@ export default class RoomList extends Vue {
     this.joinRoom(this.$route);
   }
 
+  destroyed() {
+    this.$store.dispatch('leaveRoom');
+  }
+
   @Watch('$route')
   private async joinRoom(_to: Route, from?: Route) {
     if (from != null && from.name != null && from.name.startsWith('room-')) {

@@ -65,6 +65,8 @@ func (c *Client) handleMessage(request *requestMessage) {
 		var message requestMessageDataJoinRoom
 		json.Unmarshal(request.Data, &message)
 		c.joinRoom(message)
+	case "room:leave":
+		c.leaveRoom()
 	case "variant:allocate":
 		c.allocateVariant()
 	case "variant:update":
@@ -193,6 +195,13 @@ func (c *Client) joinRoom(message requestMessageDataJoinRoom) {
 		"quotaEnabled": quotaEnabled,
 		"editMode":     editMode,
 	})
+}
+
+func (c *Client) leaveRoom() {
+	c.room.unregister <- c
+
+	c.room = nil
+	c.secret = ""
 }
 
 func (c *Client) allocateVariant() {
