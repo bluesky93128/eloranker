@@ -151,8 +151,10 @@ export class Connection extends EventEmitter {
   }
 }
 
-//const socketHost = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost';
-const socketHost = '163.172.174.77';
+const socketHost =
+  process.env.VUE_APP_SOCKET_HOST ||
+  (process.env.NODE_ENV === 'production' ? window.location.host : 'localhost');
+
 const socketUrl = `${window.location.protocol === 'https' ? 'wss' : 'ws'}://${socketHost}/ws`;
 
 export default new Connection(socketUrl);
