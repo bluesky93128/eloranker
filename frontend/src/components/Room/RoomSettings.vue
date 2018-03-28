@@ -24,7 +24,7 @@
               <span class="tag is-info">Connected Clients: {{ clientNumber }}</span>
             </div>
           </header>
-          <div v-if="!voting" class="card-content">
+          <div class="card-content">
             <div class="field">
               <div class="control">
                 <div class="select">
