@@ -56,7 +56,6 @@ const getters: GetterTree<State, any> = {
   },
 
   canVote: state => state.variants.length >= 2,
-  sortedVariants: state => state.variants.slice().sort(sorters.get(state.sortingOrder)),
   hasWriteAccess: (state, getters) => (id: string) => {
     switch (state.roomEditMode) {
       case EditMode.Trust:

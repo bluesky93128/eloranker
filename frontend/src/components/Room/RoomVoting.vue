@@ -65,16 +65,7 @@
               <ShareBlock class="is-pulled-right"/>
             </div>
           </div>
-          <div v-if="showList" class="columns is-multiline">
-            <VariantElement
-              listing
-              ref="elements"
-              v-for="(variant, index) in sortedVariants"
-              :number="index + 1"
-              :key="variant.uuid"
-              :variant="variant"
-            />
-          </div>
+          <VariantList v-if="showList" :order="SortingOrder.RATING" listing />
         </div>
       </div>
     </section>
@@ -83,28 +74,28 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import { State, Getter } from 'vuex-class';
+import { State } from 'vuex-class';
 import { Variant, SortingOrder } from '@/room';
 import connection from '@/connection';
 import VariantElement from './VariantElement.vue';
 import ShareBlock from './ShareBlock.vue';
+import VariantList from './VariantList.vue';
 
-@Component({ components: { VariantElement, ShareBlock } })
+@Component({ components: { VariantElement, VariantList, ShareBlock } })
 export default class RoomVoting extends Vue {
+  SortingOrder = SortingOrder;
+
   @State variants!: Variant[];
-  @Getter sortedVariants!: Variant[];
-  @Getter findVariant!: (id: string) => Variant | undefined;
   pair: [string, string] | null = null;
   showList = false;
 
   get pairVariants() {
     if (this.pair == null) return [];
-    return this.pair.map(id => this.findVariant(id));
+    return this.pair.map(id => this.$store.getters.findVariant(id));
   }
 
   mounted() {
     this.nextPair();
-    this.$store.commit('setSortingOrder', SortingOrder.RATING);
     connection.on('voting:get', ({ variants, error }) => {
       if (error) {
         if (error === 'not enough variants to vote') {

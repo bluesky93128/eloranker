@@ -13,15 +13,14 @@
                   </span>
                 </div>
               </div>
-              <h5 v-if="sortedVariants.length < 3" class="subtitle is-5">
-                * You need to add <b>{{ 3 - sortedVariants.length }}</b> more items to start voting
+              <h5 v-if="this.$store.state.variants.length < 3" class="subtitle is-5">
+                * You need to add <b>{{ 3 - this.$store.state.variants.length }}</b> more items to start voting
               </h5>
               <div v-else>
                 <router-link
                   class="button is-rounded is-large is-warning"
                   tag="button"
                   :to="{ name: 'room-voting', params: $route.params }"
-                  :disabled="!canVote"
                 >Start voting</router-link>
               </div>
             </div>
@@ -40,10 +39,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Getter, State } from 'vuex-class';
-import { Variant } from '@/room';
-import connection from '@/connection';
+import { State } from 'vuex-class';
 import { EditMode } from '@/room';
+import connection from '@/connection';
 
 @Component
 export default class RoomStatus extends Vue {
@@ -51,8 +49,6 @@ export default class RoomStatus extends Vue {
   @State roomName!: string;
   @State roomSecret!: string;
   @State clientNumber!: number;
-  @Getter canVote!: boolean;
-  @Getter sortedVariants!: Variant[];
   @State isAdmin!: boolean;
   exposeSecret = false;
   editingName = false;
