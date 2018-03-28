@@ -5,7 +5,6 @@ import router from '@/router';
 import Vuex, { GetterTree, MutationTree, ActionTree } from 'vuex';
 import { Variant, SortingOrder, emptyVariant, EditMode } from './room';
 import connection from './connection';
-import sorters from './sorters';
 import { JoinRoomEvent } from '@/events';
 
 Vue.use(Vuex);

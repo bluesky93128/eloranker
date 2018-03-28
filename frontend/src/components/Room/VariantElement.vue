@@ -140,11 +140,10 @@ export default class VariantElement extends Vue {
   }
 
   setIgnored(ignored: boolean) {
-    if (this.confirmingIgnore === false) {
+    if (!this.confirmingIgnore) {
       this.confirmingIgnore = true;
       return;
     }
-    console.log("asdasd");
     const id = this.variant.uuid;
     this.$store.commit('setVariantIgnored', { id, ignored });
     connection.setVariantIgnored(id, ignored);
@@ -166,8 +165,7 @@ export default class VariantElement extends Vue {
     this.selectingImage = true;
   }
 
-  async closeImageSelector(option: Number) {
-    console.log(option);
+  async closeImageSelector() {
     this.selectingImage = false;
   }
 
