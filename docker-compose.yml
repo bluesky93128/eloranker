@@ -28,6 +28,7 @@ services:
     environment:
       REDIS_ADDRESS: redis:6379
     tty: true
+    restart: on-failure
     depends_on:
       - frontend
       - redis
