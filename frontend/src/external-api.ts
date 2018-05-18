@@ -14,7 +14,7 @@ export async function googleAutocomplete(text: string): Promise<string[]> {
 export async function yahooImages(query: string): Promise<string[]> {
   query = encodeURIComponent(query);
 
-  const url = `https://crossorigin.me/https://images.search.yahoo.com/search/images?ei=UTF-8&p=${query}`;
+  const url = `https://cors-anywhere.herokuapp.com/https://images.search.yahoo.com/search/images?ei=UTF-8&p=${query}`;
   const pageText = await (await fetch(url)).text();
   const page = new DOMParser().parseFromString(pageText, 'text/html');
 
