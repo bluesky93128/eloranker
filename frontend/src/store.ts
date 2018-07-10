@@ -5,7 +5,6 @@ import router from '@/router';
 import Vuex, { GetterTree, MutationTree, ActionTree } from 'vuex';
 import { Variant, SortingOrder, emptyVariant, EditMode } from './room';
 import connection from './connection';
-import sorters from './sorters';
 import { JoinRoomEvent } from '@/events';
 
 Vue.use(Vuex);
@@ -27,7 +26,8 @@ interface State {
   sortingOrder: SortingOrder;
 }
 
-const baseState: State = {
+// Use function to make it immutable for use in replaceState.
+const baseState: () => State = () => ({
   joined: false,
   isAdmin: false,
   roomName: '',
@@ -42,7 +42,7 @@ const baseState: State = {
   clientNumber: 0,
   variants: [],
   sortingOrder: SortingOrder.DATE,
-};
+});
 
 const getters: GetterTree<State, any> = {
   findVariant: state => (id: string) => state.variants.find(v => v.uuid === id),
@@ -55,8 +55,7 @@ const getters: GetterTree<State, any> = {
     return ignoredVariantsLen * 2 < state.variants.length;
   },
 
-  canVote: state => state.variants.length >= 2,
-  sortedVariants: state => state.variants.slice().sort(sorters.get(state.sortingOrder)),
+  canVote: state => state.variants.length >= 3,
   hasWriteAccess: (state, getters) => (id: string) => {
     switch (state.roomEditMode) {
       case EditMode.Trust:
@@ -115,6 +114,12 @@ const mutations: MutationTree<State> = {
     store.commit('setEditMode', event.editMode);
   },
 
+  resetRoomState() {
+    // For now main state object means room state, thus completely resetting it is ok.
+    // TODO: Use module in case of requiring to save some state.
+    store.replaceState(baseState());
+  },
+
   setVariantIgnored(state, { id, ignored }: { id: string; ignored: boolean }) {
     Vue.set(state.ignoredVariants, id, ignored);
   },
@@ -145,6 +150,14 @@ const actions: ActionTree<State, any> = {
       const result = await connection.joinRoom(store.state.roomName, store.state.roomSecret);
       store.commit('loadRoom', result);
       store.commit('setJoined', true);
+
+      if (!store.getters.hasWriteAccess('') && router.currentRoute.name === 'room-edit') {
+        if (store.getters.canVote) {
+          router.push({ name: 'room-voting', params: router.currentRoute.params });
+        } else {
+          router.push({ name: 'home' });
+        }
+      }
     } catch (err) {
       store.commit('setJoined', false);
       if (err.message === 'room not exists') {
@@ -154,13 +167,19 @@ const actions: ActionTree<State, any> = {
       }
     }
   },
+
+  async leaveRoom(store) {
+    store.commit('resetRoomState');
+    await connection.waitOpen();
+    await connection.leaveRoom();
+  },
 };
 
 const store = new Vuex.Store<State>({
   actions,
   mutations,
   getters,
-  state: baseState,
+  state: baseState(),
 });
 
 connection.on('room:clients', ({ clients }) => store.commit('setClientNumber', clients));

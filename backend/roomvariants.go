@@ -20,7 +20,7 @@ func (r *Room) AllocateNewVariant(author *Client) (string, error) {
 
 	fields := map[string]interface{}{
 		"rating":    1000,
-		"createdAt": time.Now().Unix(),
+		"createdAt": time.Now().UnixNano() / int64(time.Millisecond),
 		"author":    author.getUniqueIdentifier(),
 	}
 

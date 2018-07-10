@@ -88,8 +88,8 @@ export class Connection extends EventEmitter {
     });
   }
 
-  public newRoom() {
-    this.send('room:new');
+  public newRoom(title: string) {
+    this.send('room:new', { title });
     return new Promise<events.NewRoomEvent>((resolve, reject) =>
       this.once(
         'room:new',
@@ -106,6 +106,10 @@ export class Connection extends EventEmitter {
         event => (event.error ? reject(new Error(event.error)) : resolve(event)),
       ),
     );
+  }
+
+  public leaveRoom() {
+    this.send('room:leave');
   }
 
   public allocateNewVariant() {
@@ -151,7 +155,10 @@ export class Connection extends EventEmitter {
   }
 }
 
-const socketHost = process.env.NODE_ENV === 'production' ? window.location.host : 'localhost';
+const socketHost =
+  process.env.VUE_APP_SOCKET_HOST ||
+  (process.env.NODE_ENV === 'production' ? window.location.host : 'localhost');
+
 const socketUrl = `${window.location.protocol === 'https' ? 'wss' : 'ws'}://${socketHost}/ws`;
 
 export default new Connection(socketUrl);

@@ -2,9 +2,17 @@
   <div id="app">
     <Header />
     <router-view />
-    <div v-if="error" :class="$style.errorOverlay">
-      <div :class="$style.errorOverlayMessage">{{ error }}</div>
+    <div v-if="error" class="container">
+      <article class="message is-danger">
+        <div class="message-header">
+          <p>Error</p>
+        </div>
+        <div class="message-body">
+          {{ error }}
+        </div>
+      </article>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -12,8 +20,9 @@
 import { Vue, Component } from 'vue-property-decorator';
 import connection from '@/connection';
 import Header from './components/Header/Header.vue';
+import Footer from './components/Footer/Footer.vue';
 
-@Component({ components: { Header } })
+@Component({ components: { Header, Footer } })
 export default class App extends Vue {
   socketClosed = false;
 
@@ -36,14 +45,10 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss" module>
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans|Fira+Sans+Condensed:400,500');
+
 :global #app {
-  text-align: center;
-  color: #2c3e50;
-  min-width: 200px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-flow: column;
+  background: #f5f5f5;
 }
 
 .errorOverlay {

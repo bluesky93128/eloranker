@@ -1,27 +1,88 @@
 <template>
   <div>
-    <VariantElement v-if="pair" voting :variant="pairVariants[0]" @click.native="vote(pair[0])" />
-    <VariantElement v-if="pair" voting :variant="pairVariants[1]" @click.native="vote(pair[1])" />
-    <button class="button" @click="nextPair">SKIP</button>
+    <div class="section">
+      <div class="container">
+        <div class="columns is-centered is-vcentered">
+          <transition name="fade-variant-left" mode="out-in">
+            <VariantElement v-if="pair" voting :variant="pairVariants[0]" :key="pairVariants[0].uuid">
+              <div class="is-overlay is-4by3" @click="vote(pair[0])">
+              </div>
+            </VariantElement>
+          </transition>
+          <div class="column is-one-third">
+            <div class="has-text-centered is-hidden-mobile">
+              <p class="title is-1 is-unselectable" id="orLabel">VS</p>
+            </div>
+            <div class="buttons has-addons is-centered">
+              <button class="button is-centered" @click="nextPair">Skip</button>
+            </div>
+          </div>
+          <transition name="fade-variant" mode="out-in">
+            <VariantElement v-if="pair" voting :variant="pairVariants[1]" :key="pairVariants[1].uuid">
+              <div class="is-overlay is-4by3" @click="vote(pair[1])">
+              </div>
+            </VariantElement>
+          </transition>
+        </div>
+      </div>
+    </div>
+    <section class="hero is-primary is-red">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns">
+            <div class="column is-half">
+              <div class="field has-text-left">
+                <h2 class="title is-2">
+                  See the results...
+                </h2>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <a class="button is-warning" @click="showList = !showList">
+                    <span class="icon">
+                      <i :class="showList ? 'icon-eye-off' : 'icon-eye'"></i>
+                    </span>
+                    <span>{{ showList ? 'Hide' : 'Show' }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field has-text-right">
+                <h2 class="title is-2">
+                  Share
+                </h2>
+              </div>
+              <ShareBlock class="is-pulled-right"/>
+            </div>
+          </div>
+          <VariantList v-if="showList" :order="SortingOrder.RATING" listing />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import { State, Getter } from 'vuex-class';
-import { Variant } from '@/room';
+import { State } from 'vuex-class';
+import { Variant, SortingOrder } from '@/room';
 import connection from '@/connection';
 import VariantElement from './VariantElement.vue';
+import ShareBlock from './ShareBlock.vue';
+import VariantList from './VariantList.vue';
 
-@Component({ components: { VariantElement } })
+@Component({ components: { VariantElement, VariantList, ShareBlock } })
 export default class RoomVoting extends Vue {
+  SortingOrder = SortingOrder;
+
   @State variants!: Variant[];
-  @Getter findVariant!: (id: string) => Variant | undefined;
   pair: [string, string] | null = null;
+  showList = false;
 
   get pairVariants() {
     if (this.pair == null) return [];
-    return this.pair.map(id => this.findVariant(id));
+    return this.pair.map(id => this.$store.getters.findVariant(id));
   }
 
   mounted() {
@@ -29,7 +90,7 @@ export default class RoomVoting extends Vue {
     connection.on('voting:get', ({ variants, error }) => {
       if (error) {
         if (error === 'not enough variants to vote') {
-          this.$router.push({ name: 'room-list', params: this.$route.params });
+          this.$router.push({ name: 'room-edit', params: this.$route.params });
           return;
         }
         throw new Error(error);
@@ -57,7 +118,3 @@ export default class RoomVoting extends Vue {
   }
 }
 </script>
-
-<style lang="scss" module>
-
-</style>

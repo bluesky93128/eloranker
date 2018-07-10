@@ -1,4 +1,8 @@
 {
   "defaultSeverity": "warning",
-  "extends": "tslint-config-ark120202"
+  "extends": "tslint-config-ark120202",
+  "rules": {
+    // TODO: Enable with tslint-config-ark120202 2.0.0
+    "variable-name": false
+  }
 }

@@ -11,16 +11,6 @@ import (
 	"time"
 )
 
-const sessionLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-
-func generateSession() string {
-	b := make([]byte, 32)
-	for i := range b {
-		b[i] = sessionLetters[rand.Intn(len(sessionLetters))]
-	}
-	return string(b)
-}
-
 func (c *Client) getUniqueIdentifier() string {
 	hash := sha256.New()
 	hash.Write([]byte(c.ip))
@@ -55,7 +45,7 @@ func (c *Client) SelectRandomPair() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(possibleVariants) <= 1 {
+	if len(possibleVariants) < 3 {
 		return nil, errors.New("not enough variants to vote")
 	}
 
