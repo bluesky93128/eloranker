@@ -12,14 +12,6 @@
         </span>
       </div>
 
-      <!-- <div id="navbarMenu" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item" href="">
-            Home
-          </a>
-        </div>
-      </div> -->
-
       <div class="navbar-end is-hidden-mobile">
         <div class="navbar-item">
           <div class="field is-grouped">

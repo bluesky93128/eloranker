@@ -8,42 +8,19 @@ $input-focus-box-shadow-size: 0;
 @import '~bulma';
 
 .navbar-item img {
-    transition: transform 0.1s ease-in 0.0s
+  transition: transform 0.1s ease-in 0s;
 }
 
 .navbar-item img:hover {
-    transform: rotateZ(1deg)
+  transform: rotateZ(1deg);
 }
 
 .navbar-item img:active {
-    transform: translateY(2px)
+  transform: translateY(2px);
 }
 
 .footer {
-    // border-top-width: 1px;
-    // border-top-color: #DDDDDD;
-    // border-top-style: solid;
-
-    //padding: 0.5rem 0.5rem 3.5rem;
-    padding: 3.0rem 1.5rem 2.5rem;
-    // .container .tabs {
-    //     justify-content: center;
-
-    //     ul {
-    //         border-bottom: none;
-    //         flex-grow: 0;
-            
-    //         li {
-    //             a {
-    //                 color: #748490;
-    //             }
-
-    //             a:hover {
-    //                 color: black;
-    //             }
-    //         }
-    //     }
-    // }
+  padding: 3rem 1.5rem 2.5rem;
 }
 
 .fade-variant-enter-active,
@@ -67,21 +44,21 @@ $input-focus-box-shadow-size: 0;
 
 .button.is-red,
 .hero.is-red {
-    background-color: #df0024;
+  background-color: #df0024;
 }
 
 .button.is-red:hover {
-    background-color: #ba001e;
+  background-color: #ba001e;
 }
 
 #orLabel {
-    font-size: 13rem;
+  font-size: 13rem;
 }
 
 .appear-class {
-    opacity: 0;
+  opacity: 0;
 }
 
 .appear-active-class {
-    transition: all 0.3s;
+  transition: all 0.3s;
 }
