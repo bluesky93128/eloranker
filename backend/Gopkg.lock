@@ -23,6 +23,18 @@
   version = "v1.6.0"
 
 [[projects]]
+  name = "github.com/google/go-github"
+  packages = ["github"]
+  revision = "e48060a28fac52d0f1cb758bc8b87c07bac4a87d"
+  version = "v15.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+
+[[projects]]
   name = "github.com/gorilla/context"
   packages = ["."]
   revision = "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
@@ -67,6 +79,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0e331e64a56968fa3925a843e22ba34d37fbccf21cbbdddb2082f5cd56c71aff"
+  inputs-digest = "0392b6eec60827385f0bd865bc8e7ca485d5a2bf677666fb379ab71b79ccf4ec"
   solver-name = "gps-cdcl"
   solver-version = 1

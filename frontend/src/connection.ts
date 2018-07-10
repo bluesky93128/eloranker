@@ -142,6 +142,10 @@ export class Connection extends EventEmitter {
     this.send('variant:remove', { id });
   }
 
+  public importVariants(owner: string, repo: string) {
+    this.send('variant:import', { type: 'github-issues', data: { owner, repo } });
+  }
+
   public setTitle(value: string) {
     this.send('settings:title', { value });
   }

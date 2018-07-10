@@ -81,6 +81,10 @@ func (c *Client) handleMessage(request *requestMessage) {
 		var message requestMessageDataRemoveVariant
 		json.Unmarshal(request.Data, &message)
 		c.removeVariant(message.ID)
+	case "variant:import":
+		var message requestMessageDataImportVariant
+		json.Unmarshal(request.Data, &message)
+		c.importVariant(message)
 	case "voting:get":
 		c.getVoting()
 	case "voting:submit":

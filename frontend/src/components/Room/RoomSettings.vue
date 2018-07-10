@@ -48,6 +48,8 @@
                 </div>
               </div>
             </div>
+
+            <ImportBlock />
           </div>
         </div>
       </div>
@@ -61,8 +63,9 @@ import { Getter, State } from 'vuex-class';
 import connection from '@/connection';
 import { EditMode, SortingOrder } from '@/room';
 import ShareBlock from './ShareBlock.vue';
+import ImportBlock from './ImportBlock.vue';
 
-@Component({ components: { ShareBlock } })
+@Component({ components: { ShareBlock, ImportBlock } })
 export default class RoomSettings extends Vue {
   $refs!: { shareableLink: HTMLInputElement };
   @State roomName!: string;
