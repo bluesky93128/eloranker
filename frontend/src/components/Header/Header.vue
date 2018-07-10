@@ -16,12 +16,12 @@
         <div class="navbar-item">
           <div class="field is-grouped">
             <p class="control">
-              <a class="button is-primary is-red" href="">
+              <router-link class="button is-primary is-red" to="/">
                 <span class="icon">
                   <i class="icon-pencil-squared icon-5x"></i>
                 </span>
                 <span>New Poll</span>
-              </a>
+              </router-link>
             </p>
           </div>
         </div>
