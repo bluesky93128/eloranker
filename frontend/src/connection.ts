@@ -87,6 +87,11 @@ export class Connection extends EventEmitter {
       this.on('state', handler);
     });
   }
+  
+  public removeVotingListener(handler: any) {
+    console.log("removing listner");
+    this.removeListener('voting:get', handler);
+  }
 
   public newRoom(title: string) {
     this.send('room:new', { title });
